@@ -18,7 +18,5 @@ This is a hacked together tool that will read in a yaml file and orchestrate the
   - Add flag to apply everything in one hit rather than individually (faster but less feedback for errors)
   - Add output to json 
   - Improve the application by adding tests, and updating the cli according to https://blog.alexellis.io/5-keys-to-a-killer-go-cli/
-- 
-
 
 
