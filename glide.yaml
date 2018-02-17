@@ -1,0 +1,8 @@
+package: github.com/haydonryan/tile-configurator
+import:
+- package: github.com/Navops/yaml
+- package: github.com/jessevdk/go-flags
+- package: github.com/xchapter7x/lo
+testImport:
+- package: github.com/onsi/ginkgo
+- package: github.com/onsi/gomega
