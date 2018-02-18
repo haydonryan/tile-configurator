@@ -17,12 +17,12 @@ resources:
                                         # the variable to be an array of keys or
                                         # extra variables (one per key) here
 
-# We are publishing final releases here
+# We are publishing draft releases here
 - name: github-release-repository
   type: github-release
   source: 
     owner: haydonryan
-    repository: tile-configurator
+    repository: ((github_repository_name))
     access_token: ((github_access_token))
     drafts: true
 
@@ -34,11 +34,11 @@ resources:
 ##
 #####################################################################
 jobs:
-- name: unit-tests  
+# - name: unit-tests
 
-- name: build
+# - name: build
 
-- name: publish
+# - name: publish
 
 
 - name: test-and-build
@@ -46,8 +46,6 @@ jobs:
     - aggregate:
       - get: source-code
         trigger: true
-#    - task: test
-#      file: source-code/ci/tasks/runTests.yml
     - task: build
       config:
         platform: linux
