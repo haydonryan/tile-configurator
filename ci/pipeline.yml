@@ -1,0 +1,72 @@
+#####################################################################
+##
+##  Main Concourse Pipeline to build and release Tile Configurator 
+## 
+##
+#####################################################################
+
+resources:
+- name: source-code
+  type: git
+  source:
+    uri: https://((github_url))
+    branch: master
+    commit_verification_keys:           # Only allow commits from authorised people
+    - ((gpg_key))                       # to be used for builds. This pipeline only
+                                        # supports one person - add more by changing
+                                        # the variable to be an array of keys or
+                                        # extra variables (one per key) here
+
+# We are publishing draft releases here
+- name: github-release-repository
+  type: github-release
+  source: 
+    owner: haydonryan
+    repository: ((github_repository_name))
+    access_token: ((github_access_token))
+    drafts: true
+
+
+
+#####################################################################
+##
+##  JOBS Section 
+##
+#####################################################################
+jobs:
+# - name: unit-tests
+
+# - name: build
+
+# - name: publish
+
+
+- name: test-and-build
+  plan:
+    - aggregate:
+      - get: source-code
+        trigger: true
+    - task: build
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: { repository: golang }
+        params:
+          GITHUB_URL: ((github_url))
+          APP_NAME: ((app_name))
+        inputs:
+        - name: source-code
+        outputs:
+        - name: compiled-output
+        run:
+          path: source-code/ci/tasks/build.sh
+    - put: github-release-repository
+      params:
+        name: compiled-output/name
+        tag: compiled-output/tag
+        globs:
+        - compiled-output/((app_name))-linux
+        - compiled-output/((app_name))-linux-shasum
+        - compiled-output/((app_name))-osx
+        - compiled-output/((app_name))-osx-shasum

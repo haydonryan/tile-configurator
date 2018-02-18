@@ -38,7 +38,6 @@ func readJSON(filename string) (map[string]interface{}, error) {
 }
 
 func (c *Diffbase) Execute([]string) error {
-	fmt.Println("Diffing two files")
 
 	// open configured file
 	base, _ := readJSON(c.BaseFile)
