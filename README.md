@@ -3,6 +3,10 @@
 ### Purpose
 This is a hacked together tool that will read in a yaml file and orchestrate the OM tool (https://github.com/pivotal-cf/om) (and therefore ops manager) to install and update tiles.
 
+
+### Issues / Feature requests
+If you have an issue with this tool - please submit a github issue.  I'm using Pivotal Tracker to manage the backlog for this project, so please contact me directly for access (https://www.pivotaltracker.com/n/projects/2151323).
+
 ### Benefits
 - Configuration is in YAML rather than jSON - easier to configure, read and maintain.
 - Externalization of configuration (cloud native operations)
@@ -18,6 +22,7 @@ This is a hacked together tool that will read in a yaml file and orchestrate the
   - Add flag to apply everything in one hit rather than individually (faster but less feedback for errors)
   - Add output to json 
   - Improve the application by adding tests, and updating the cli according to https://blog.alexellis.io/5-keys-to-a-killer-go-cli/
+
 
 
 
