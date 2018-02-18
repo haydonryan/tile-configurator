@@ -49,8 +49,8 @@ func (c *Diffbase) Execute([]string) error {
 	lo.G.Debug(configured)
 
 	answer := Diff(base, configured)
-	//fmt.Println("\n\nDiff between the files is:")
-	//fmt.Println(answer)
+	lo.G.Debug("\n\nDiff between the files is:")
+	lo.G.Debug(answer)
 	jsonString, _ := json.Marshal(answer)
 
 	fmt.Println(string(jsonString))
