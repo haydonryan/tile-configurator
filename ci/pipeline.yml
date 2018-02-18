@@ -9,7 +9,7 @@ resources:
 - name: source-code
   type: git
   source:
-    uri: ((github_url))
+    uri: https://((github_url))
     branch: ci
 
 # We are publishing final releases here
@@ -20,3 +20,48 @@ resources:
     repository: tile-configurator
     access_token: ((github_access_token))
     drafts: true
+
+
+
+#####################################################################
+##
+##  JOBS Section 
+##
+#####################################################################
+jobs:
+- name: unit-tests  
+
+- name: build
+
+- name: publish
+
+
+- name: test-and-build
+  plan:
+    - aggregate:
+      - get: source-code
+        trigger: true
+#    - task: test
+#      file: source-code/ci/tasks/runTests.yml
+    - task: build
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: { repository: golang }
+        params:
+          GITHUB_URL: ((github_url))
+          APP_NAME: ((app_name))
+        inputs:
+        - name: source-code
+        outputs:
+        - name: compiled-output
+        run:
+          path: source-code/ci/tasks/build.sh
+    - put: github-release-repository
+      params:
+        name: compiled-output/name
+        tag: compiled-output/tag
+        globs:
+        - compiled-output/((app_name))-linux
+        - compiled-output/((app_name))-osx
