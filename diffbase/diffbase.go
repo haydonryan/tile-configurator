@@ -59,29 +59,88 @@ func (c *Diffbase) Execute([]string) error {
 }
 
 //Diffbase returns the additions that map has to a base map
-func Diffbase(base map[string]interface{}, changed map[string]interface{}) map[string]interface{} {
-	difference := make(map[string]interface{})
+func Diff(base interface{}, changed interface{}) interface{} {
+	//	difference := make(map[string]interface{})
+	lo.G.Debug("Comparing:")
+	lo.G.Debugf("Value1: %v Type %T\n", base, base)
+	lo.G.Debugf("Value2: %v Type %T\n", changed, changed)
 
-	for key, value := range changed {
+	if base == nil {
+		lo.G.Debug("base is nil")
+		return changed
+	}
 
-		switch value.(type) {
-		case map[string]interface{}:
-			// base[key] could be nil here, if it is then just return whole tree
-			if base[key] == nil {
-				difference[key] = changed[key]
-			} else {
+	if changed == nil {
+		lo.G.Debug("changed is nil")
+		return nil
+	}
+	// compare if types are the same
+	// not done yet.
 
-				ret := Diffbase(base[key].(map[string]interface{}), changed[key].(map[string]interface{}))
-				if len(ret) != 0 {
-					difference[key] = ret
+	switch changed.(type) {
+	case map[string]interface{}:
+		if base == nil {
+			return changed
+		} else {
+			changedMap := changed.(map[string]interface{})
+			baseMap := base.(map[string]interface{})
+			difference := make(map[string]interface{})
+
+			for key, value := range changed.(map[string]interface{}) {
+				diff := Diff(baseMap[key], changedMap[key])
+
+				if diff != nil {
+					difference[key] = diff
 				}
+
+				_ = value
+
 			}
-		default:
-			if base[key] != changed[key] {
-				difference[key] = value
+			lo.G.Debugf("Map returning: %v Type %T\n\n", difference, difference)
+			if len(difference) == 0 {
+				return nil
 			}
+
+			return difference
+
+		}
+	case []interface{}:
+		if base == nil {
+			return changed
+		} else {
+			changedMap := changed.([]interface{})
+			baseMap := base.([]interface{})
+			var difference []interface{}
+			//difference := make([]interface{})
+
+			for key, value := range changed.([]interface{}) {
+				diff := Diff(baseMap[key], changedMap[key])
+
+				if diff != nil {
+					difference = append(difference, diff)
+
+				}
+
+				_ = value
+
+			}
+			lo.G.Debugf("Array returning: %v Type %T\n\n", difference, difference)
+			if len(difference) == 0 {
+				return nil
+			}
+			return difference
+		}
+
+	default:
+		if base != changed {
+			lo.G.Debugf("Value returning: %v Type %T\n\n", changed, changed)
+			return changed
 		}
 
 	}
-	return difference
+	var m interface{}
+
+	lo.G.Debugf("returning: %v Type %T\n\n", m, m)
+	return m
+
 }
