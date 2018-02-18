@@ -23,6 +23,10 @@ APP_NAME="tile-configurator"
 # but there is no sourcecode 
 cd ${SOURCE_DIR} 
 
+
+# Glide install to get our dependencies
+glide install
+
 # Copy the source code to the gopath since go will expect it there.
 WORKING_DIR=$GOPATH/src/$GITHUB_URL
 mkdir -p ${WORKING_DIR}
