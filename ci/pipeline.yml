@@ -11,6 +11,11 @@ resources:
   source:
     uri: https://((github_url))
     branch: ci
+    commit_verification_keys:           # Only allow commits from authorised people
+    - ((gpg_key))                       # to be used for builds. This pipeline only
+                                        # supports one person - add more by changing
+                                        # the variable to be an array of keys or
+                                        # extra variables (one per key) here
 
 # We are publishing final releases here
 - name: github-release-repository
@@ -64,4 +69,6 @@ jobs:
         tag: compiled-output/tag
         globs:
         - compiled-output/((app_name))-linux
+        - compiled-output/((app_name))-linux-shasum
         - compiled-output/((app_name))-osx
+        - compiled-output/((app_name))-osx-shasum
