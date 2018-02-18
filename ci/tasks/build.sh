@@ -12,17 +12,9 @@ SOURCE_DIR=$PWD/source-code
 # Because this image doesn't have glide in it...
 go get github.com/Masterminds/glide
 
-
-
-# These need to be taken out into variables
-APP_NAME="tile-configurator"
-#GITHUB_URL="github.com/haydonryan/tile-configurator"      #### I don't like that this is hardcoded.... 
-                                                            #### need to change it.XXX
-
 # We start in the container default directory
 # but there is no sourcecode 
 cd ${SOURCE_DIR} 
-
 
 # Glide install to get our dependencies
 glide install
