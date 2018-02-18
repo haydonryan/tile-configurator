@@ -1,0 +1,22 @@
+#####################################################################
+##
+##  Main Concourse Pipeline to build and release Tile Configurator 
+## 
+##
+#####################################################################
+
+resources:
+- name: source-code
+  type: git
+  source:
+    uri: ((github_url))
+    branch: master
+
+# We are publishing final releases here
+- name: github-release-repository
+  type: github-release
+  source: 
+    owner: haydonryan
+    repository: tile-configurator
+    access_token: ((github_access_token))
+    drafts: true
