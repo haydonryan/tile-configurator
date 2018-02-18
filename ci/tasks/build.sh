@@ -27,12 +27,15 @@ cd ${WORKING_DIR}
 
 #
 GOOS=darwin GOARCH=amd64 go build -o ${OUTPUT_DIR}/${APP_NAME}-osx
-GOOS=linux GOARCH=amd64 go build -o ${OUTPUT_DIR}/${APP_NAME}-linux
+md5sum ${OUTPUT_DIR}/${APP_NAME}-osx | cut -f1 -d' ' > ${OUTPUT_DIR}/${APP_NAME}-osx-shasum
 
+GOOS=linux GOARCH=amd64 go build -o ${OUTPUT_DIR}/${APP_NAME}-linux
+md5sum ${OUTPUT_DIR}/${APP_NAME}-linux | cut -f1 -d' ' > ${OUTPUT_DIR}/${APP_NAME}-linux-shasum
 
 # Put name and tag into files in the output directory
 # echo ${DRAFT_VERSION} > ${OUTPUT_DIR}/name
 # echo ${DRAFT_VERSION} > ${OUTPUT_DIR}/tag
+
 
 echo "testversionname" > ${OUTPUT_DIR}/name
 echo "testversiontag" > ${OUTPUT_DIR}/tag
