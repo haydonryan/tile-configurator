@@ -10,7 +10,7 @@ resources:
   type: git
   source:
     uri: https://((github_url))
-    branch: ci
+    branch: master
     commit_verification_keys:           # Only allow commits from authorised people
     - ((gpg_key))                       # to be used for builds. This pipeline only
                                         # supports one person - add more by changing
