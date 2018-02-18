@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/haydonryan/tile-configurator/deploy"
@@ -12,10 +11,6 @@ import (
 )
 
 func main() {
-
-	fmt.Println("\ntileConfigurator v0.0.6")
-	fmt.Println("--------")
-
 	var opts struct {
 		Verbose []bool `short:"v" long:"verbose" description:"Show verbose debug info"`
 
