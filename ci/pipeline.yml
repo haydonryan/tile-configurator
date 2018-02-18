@@ -10,7 +10,7 @@ resources:
   type: git
   source:
     uri: ((github_url))
-    branch: master
+    branch: ci
 
 # We are publishing final releases here
 - name: github-release-repository
