@@ -24,7 +24,7 @@ APP_NAME="tile-configurator"
 cd ${SOURCE_DIR} 
 
 # Copy the source code to the gopath since go will expect it there.
-WORKING_DIR=$GOPATH/src/$REPO_ADDRESS
+WORKING_DIR=$GOPATH/src/$GITHUB_URL
 mkdir -p ${WORKING_DIR}
 cp -R ${SOURCE_DIR}/* ${WORKING_DIR}/.
 cd ${WORKING_DIR}
