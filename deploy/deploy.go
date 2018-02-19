@@ -22,10 +22,52 @@ type Deploy struct {
 
 	Password string `short:"p" long:"password" description:"Password for logging into Ops Manager"`
 	Secret   string `short:"s" long:"secret" description:"Secret for logging into Ops Manager"`
+	OM       string `short:"o" long:"om" description:"Name of OM on this system" default:"om-linux"`
 }
 
 func (c *Deploy) Execute([]string) error {
 	fmt.Println("in Deploy Execute")
+	if string(c.Key) != "" {
+		GlobalOptions.useKeyAndSecret = true
+	}
+	// Open the properties file
+	yaml, err := readYaml(string(c.Filename))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	// Parse through the map and process keys as either individual, collections and groups
+	for key, value := range yaml {
+		if key == "collections" {
+			lo.G.Debug("Found collections")
+			if GlobalOptions.useKeyAndSecret {
+				c.processAllCollection(value, string(c.URL), string(c.Key), string(c.Secret), string(c.Tile))
+			} else {
+				c.processAllCollection(value, string(c.URL), string(c.Username), string(c.Password), string(c.Tile))
+			}
+		} else if key == "groups" {
+			lo.G.Debug("Found groups block")
+			if GlobalOptions.useKeyAndSecret {
+				c.processGroup(value, string(c.URL), string(c.Key), string(c.Secret), string(c.Tile))
+			} else {
+				c.processGroup(value, string(c.URL), string(c.Username), string(c.Password), string(c.Tile))
+			}
+
+		} else {
+			properties := fmt.Sprintf("{\"%v\": {\"value\":  \"%v\"}}\n", key, value)
+			fmt.Printf("Applying setting %v to tile %v......", key, string(c.Tile))
+			//runCommand(value, string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile))
+			if GlobalOptions.useKeyAndSecret {
+				c.runCommand(string(c.URL), string(c.Key), string(c.Secret), string(c.Tile), properties)
+
+			} else {
+				c.runCommand(string(c.URL), string(c.Username), string(c.Password), string(c.Tile), properties)
+			}
+			fmt.Printf("Done.\n")
+		}
+	}
+
 	return nil
 }
 
@@ -43,7 +85,7 @@ var GlobalOptions struct {
 }
 
 //each collection block can have multiple collections.
-func processAllCollection(m interface{}, url string, user string, password string, tile string) {
+func (c *Deploy) processAllCollection(m interface{}, url string, user string, password string, tile string) {
 	var groupSlice []interface{}
 	groupSlice, correct := m.([]interface{})
 
@@ -61,7 +103,7 @@ func processAllCollection(m interface{}, url string, user string, password strin
 					lo.G.Debug("[-", makeJSON(result), "-]")
 
 					fmt.Printf("Applying setting %v to tile %v......", i, tile)
-					runCommand(url, user, password, tile, makeJSON(result))
+					c.runCommand(url, user, password, tile, makeJSON(result))
 					fmt.Printf("Done.\n")
 				}
 			} else {
@@ -74,7 +116,7 @@ func processAllCollection(m interface{}, url string, user string, password strin
 	}
 }
 
-func processGroup(m interface{}, url string, user string, password string, tile string) {
+func (c *Deploy) processGroup(m interface{}, url string, user string, password string, tile string) {
 	//Groups are defined as an array of maps.  Name is within the map
 	var groupSlice []interface{}
 	groupSlice, correct := m.([]interface{})
@@ -103,7 +145,7 @@ func processGroup(m interface{}, url string, user string, password string, tile 
 			lo.G.Debug("[-", makeJSON(iface), "-]")
 
 			fmt.Printf("Applying Group %v to tile %v.....", key, tile)
-			runCommand(url, user, password, tile, makeJSON(iface))
+			c.runCommand(url, user, password, tile, makeJSON(iface))
 			fmt.Printf("Done.\n")
 		}
 
@@ -118,10 +160,9 @@ func processHash(m interface{}) {
 
 }
 
-func runCommand(url string, user string, password string, tile string, properties string) {
+func (c *Deploy) runCommand(url string, user string, password string, tile string, properties string) {
 	var output []byte
 
-	cmd := "om"
 	var args []string
 
 	if GlobalOptions.useKeyAndSecret {
@@ -133,7 +174,7 @@ func runCommand(url string, user string, password string, tile string, propertie
 
 	lo.G.Debug(args)
 
-	cmdrnuner := exec.Command(cmd, args...)
+	cmdrnuner := exec.Command(c.OM, args...)
 
 	if output, err := cmdrnuner.CombinedOutput(); err != nil {
 		fmt.Println("Call to OM returned error:")
@@ -164,44 +205,3 @@ func readYaml(filename string) (map[string]interface{}, error) {
 	}
 	return m, nil
 }
-
-// if string(opts.Key) != "" {
-// 	GlobalOptions.useKeyAndSecret = true
-// }
-// // Open the properties file
-// yaml, err := readYaml(string(opts.Filename))
-// if err != nil {
-// 	fmt.Println(err)
-// 	return
-// }
-
-// // Parse through the map and process keys as either individual, collections and groups
-// for key, value := range yaml {
-// 	if key == "collections" {
-// 		lo.G.Debug("Found collections")
-// 		if GlobalOptions.useKeyAndSecret {
-// 			processAllCollection(value, string(opts.URL), string(opts.Key), string(opts.Secret), string(opts.Tile))
-// 		} else {
-// 			processAllCollection(value, string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile))
-// 		}
-// 	} else if key == "groups" {
-// 		lo.G.Debug("Found groups block")
-// 		if GlobalOptions.useKeyAndSecret {
-// 			processGroup(value, string(opts.URL), string(opts.Key), string(opts.Secret), string(opts.Tile))
-// 		} else {
-// 			processGroup(value, string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile))
-// 		}
-
-// 	} else {
-// 		properties := fmt.Sprintf("{\"%v\": {\"value\":  %v}}\n", key, value)
-// 		fmt.Printf("Applying setting %v to tile %v......", key, string(opts.Tile))
-// 		//runCommand(value, string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile))
-// 		if GlobalOptions.useKeyAndSecret {
-// 			runCommand(string(opts.URL), string(opts.Key), string(opts.Secret), string(opts.Tile), properties)
-
-// 		} else {
-// 			runCommand(string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile), properties)
-// 		}
-// 		fmt.Printf("Done.\n")
-// 	}
-// }
