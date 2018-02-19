@@ -1,4 +1,8 @@
 .DS_Store
-debug
+
 bin/
 .vscode/
+
+# ignore binaries
+tile-configurator
+debug
