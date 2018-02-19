@@ -24,5 +24,31 @@ If you have an issue with this tool - please submit a github issue.  I'm using P
   - Improve the application by adding tests, and updating the cli according to https://blog.alexellis.io/5-keys-to-a-killer-go-cli/
 
 
+### Workflows:
+
+#### JSON Track (advanced customers):
+Customer wants to manage entire tile configuration in JSON with pipelines and using commandline
+
+##### Install
+###### Customer has sandbox and can generate JSON from Ops Managaer
+stage tile
+save properties
+configure tile
+save properties
+(Note this doesn't work for X in ERT, keys, or secrets yet as the Ops Manger API won't return them)
+###### Customer wants to start from JSON template / schema
+
+##### Upgrade
+Diff new tile to current tile to determine changes in json
 
 
+
+#### YAML Track (easier):
+ Customer wants to simplify to yaml
+##### Install
+###### Customer has sandbox and can generate JSON
+###### Customer wants to start from YAML template
+
+##### Upgrade
+Diff new tile version to old to see what changes are needed (in yaml)
+ With pipelines and using commandline
