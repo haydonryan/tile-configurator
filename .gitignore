@@ -6,3 +6,4 @@ bin/
 # ignore binaries
 tile-configurator
 debug
+ci/params.yml
