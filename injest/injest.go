@@ -2,12 +2,14 @@ package injest
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"sort"
 
 	"github.com/Navops/yaml"
+	"github.com/xchapter7x/lo"
 )
 
 /// Injest required for go-flags
@@ -19,13 +21,16 @@ type Injest struct {
 /// go-flags callhack entry point
 func (c *Injest) Execute([]string) error {
 
-	base, _ := readJSON(c.InputFile)
-	ProcessInjest(base)
+	base, _ := ReadJSON(c.InputFile)
+	result, _ := ProcessInjest(base)
+	b, _ := yaml.Marshal(result)
+	fmt.Println("---------")
+	fmt.Println(string(b))
 
 	return nil
 }
 
-func readJSON(filename string) (map[string]interface{}, error) {
+func ReadJSON(filename string) (map[string]interface{}, error) {
 	// Open the properties file
 	base, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -63,7 +68,104 @@ func readYaml(filename string) (map[string]interface{}, error) {
 
 var help = map[string]string{}
 
-func ProcessInjest(m interface{}) {
+func CreateCollection(m interface{}) (map[string]interface{}, error) {
+	//fmt.Printf("Collection: %v %T\n\n\n", m, m)
+	source, correct := m.(map[string]interface{})
+	result := make(map[string]interface{})
+	if correct {
+
+		for k, v := range source {
+			if k == "guid" {
+				continue //ignore guids - we don't want them
+			}
+			//fmt.Printf("Element: %v %v\n\n\n", k, v.(map[string]interface{})["value"])
+			result[k] = v.(map[string]interface{})["value"]
+
+		}
+	}
+
+	return result, nil
+
+}
+func CreateCollections(m interface{}) ([]interface{}, error) {
+	lo.G.Debugf("Collection: %v %T\n\n\n", m, m)
+	source, correct := m.(map[string]interface{})
+	var result []interface{}
+	if correct {
+
+		for k, v := range source {
+			if k == "value" {
+				// this is an array of maps
+
+				value, correct := v.([]interface{})
+				if correct {
+					lo.G.Debugf("CA: %v %v\n\n\n", k, v)
+					for element, value := range value {
+						lo.G.Debugf("E: %v %v\n\n\n", element, value)
+						e, _ := CreateCollection(value)
+						result = append(result, e)
+
+						lo.G.Debugf("YAY: %v %T\n", e, e)
+
+						_ = element
+					}
+				}
+
+			}
+
+		}
+	}
+	return result, nil
+
+}
+
+func ProcessInjest(m interface{}) (map[string]interface{}, error) {
+	result := make(map[string]interface{})
+	source, correct := m.(map[string]interface{})
+	if correct {
+
+		// Remove properties key and just look at keys under it.
+		sub := source["properties"]
+		if sub == nil {
+			return nil, errors.New("properties was not found")
+		}
+
+		subkey := sub.(map[string]interface{})
+		//		fmt.Println("subkey: ", subkey, "\n")
+
+		for k, v := range subkey {
+			property := v.(map[string]interface{}) //maintain type as long as possible
+			switch property["type"] {
+			case "integer":
+				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
+					if property["value"] != nil {
+
+						result[k] = int(property["value"].(float64)) // no idea why this is read in as a float64
+					} else {
+						result[k] = 0
+					}
+				}
+			case "collection":
+				result[k], _ = CreateCollections(v)
+
+			//case "selector":
+
+			default: // strings
+				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
+					result[k] = property["value"]
+				}
+			}
+
+			//fmt.Println("subkey: ", property)
+
+		}
+	} else {
+		return nil, errors.New("parameter passed was incorrect")
+	}
+	return result, nil
+}
+
+func OldProcessInjest(m interface{}) {
 	var sl map[string]interface{}
 	sl, correct := m.(map[string]interface{})
 
@@ -113,6 +215,8 @@ func ProcessInjest(m interface{}) {
 				//case "dropdown_select":
 				//fmt.Println("< dropdown_select not nsupported >")
 				delete(sl["properties"].(map[string]interface{}), k)
+
+			// Supported
 			case "text":
 				fallthrough
 			case "email": //email are just text fields but have regex checking
