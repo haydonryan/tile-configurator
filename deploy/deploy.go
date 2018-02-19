@@ -26,7 +26,7 @@ type Deploy struct {
 }
 
 func (c *Deploy) Execute([]string) error {
-	fmt.Println("in Deploy Execute")
+
 	if string(c.Key) != "" {
 		GlobalOptions.useKeyAndSecret = true
 	}
