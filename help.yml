@@ -1,0 +1,8 @@
+---
+.properties.syslog":              "Syslog Forwarding\n# -----------------\n# Choose either enabled or disbled"
+.properties.syslog.enabled.port": "The port for syslog"
+
+.properties.optional_protections":                                "If Disabled, you must set MySQL Monitor Node Instances to 0 in the \"Resource Config\" pane at left."
+.properties.optional_protections.enable.canary_poll_frequency":   "How frequently the canary checks for replication failure, in seconds. Lower numbers will cause the canary to run more frequently, adding load to the database."
+.properties.optional_protections.enable.canary_write_read_delay": "How long the canary waits to verify data is replicating across each MySQL node, in seconds. Clusters under heavily load will experience some small replication lag as writesets are committed across the nodes."
+.properties.optional_protections.enable.recipient_email":         "The MySQL service will send alerts when the cluster experiences a replication issue or a node is not allowed to auto-rejoin the cluster."
