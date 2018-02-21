@@ -8,6 +8,8 @@ import (
 	"log"
 	"sort"
 
+	"github.com/haydonryan/tile-configurator/dictionary"
+
 	"github.com/Navops/yaml"
 	"github.com/xchapter7x/lo"
 )
@@ -235,46 +237,35 @@ func OutputYaml(m map[string]interface{}, simple bool, annotate bool) {
 	sort.Strings(sortedKeys)
 
 	// Open the help file
-	help, err := readYaml("help.yml")
+	help := dictionary.NewDictionary()
+	err := help.LoadDictionary("help.yml")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Open the dictonary file
-	dict, err := readYaml("dictonary.yml")
+	dict := dictionary.NewDictionary()
+	err = dict.LoadDictionary("dictonary.yml")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// iterate over the keys
-	for _, k := range sortedKeys {
-		//fmt.Printf("%v %T\n", m[k], m[k])
-		if comment, ok := help[k]; ok && annotate { // Add comments
-			if simpleKey, correct := dict[k].(string); correct && simple {
+	for _, key := range sortedKeys {
+
+		if comment, ok := help.Lookup[key]; ok && annotate { // Add comments
+
+			if simpleKey, correct := dict.Lookup[key]; correct && simple {
 				// swap opsmgrKey for simplified key
-				PrintYamlLine(simpleKey, m[k], comment.(string))
-				// if comment.(string)[0] == '-' { // if first char is '-' put comment after yaml
-				// 	fmt.Printf("%v: %v  #%v\n", simpleKey, m[k], comment)
-				// } else {
-				// 	fmt.Printf("\n# %v\n%v: %v\n", comment, simpleKey, m[k])
-				// }
+				PrintYamlLine(simpleKey, m[key], comment)
 			} else {
-				// Could be a collection, nil
-				PrintYamlLine(k, m[k], comment.(string))
-				/*if comment.(string)[0] == '-' { // if first char is '-' put comment after yaml
-					fmt.Printf("%v: %v  #%s\n", k, m[k], comment)
-				} else {
-					fmt.Printf("\n# %v\n%v: %v\n", comment, k, m[k])
-				}*/
+				PrintYamlLine(key, m[key], comment)
 			}
 		} else {
-			if simpleKey, correct := dict[k].(string); correct && simple {
-				// swap opsmgrKey for simplified key
-				//fmt.Printf("%v: %v\n", simpleKey, m[k])
-				PrintYamlLine(simpleKey, m[k], "")
+			if simpleKey, correct := dict.Lookup[key]; correct && simple {
+				PrintYamlLine(simpleKey, m[key], "")
 			} else {
-				//fmt.Printf("%v: %v\n", k, m[k])
-				PrintYamlLine(k, m[k], "")
+				PrintYamlLine(key, m[key], "")
 			}
 		}
 	}
