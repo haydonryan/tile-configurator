@@ -16,6 +16,8 @@ import (
 ///-----------
 type Injest struct {
 	InputFile string `short:"i" long:"injest" description:"Filename to be injested" required:"true"`
+	Simple    bool   `short:"s" long:"simple" description:"Simplify Keys"`
+	Annotate  bool   `short:"a" long:"annotate" description:"Annotate output with help"`
 }
 
 /// go-flags callhack entry point
@@ -23,11 +25,12 @@ func (c *Injest) Execute([]string) error {
 
 	base, _ := ReadJSON(c.InputFile)
 	result, _ := ProcessInjest(base)
-	b, _ := yaml.Marshal(result)
-
-	fmt.Println(string(b))
-	fmt.Println("----------")
-	AnnotateYaml(result)
+	// 	b, _ := yaml.Marshal(result)
+	// fmt.Println(string(b))
+	// fmt.Printf("%v %v", c.Simple, c.Annotate)
+	// fmt.Println("----------")
+	//result = forceSimpleKeys(result)
+	OutputYaml(result, c.Simple, c.Annotate)
 
 	return nil
 }
@@ -152,7 +155,7 @@ func ProcessInjest(m interface{}) (map[string]interface{}, error) {
 
 			//case "selector":
 			case "simple_credentials":
-				fmt.Println("simple_credentials")
+				//fmt.Println("simple_credentials")
 				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
 					result[k] = property["value"].(map[string]interface{})["password"]
 				}
@@ -162,7 +165,7 @@ func ProcessInjest(m interface{}) (map[string]interface{}, error) {
 			case "rsa_cert_credentials":
 				fmt.Println("rsa_cert_credentials not implemented yet")
 			case "secret":
-				fmt.Println("Secret")
+				//fmt.Println("Secret")
 				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
 					result[k] = property["value"].(map[string]interface{})["secret"]
 				}
@@ -182,7 +185,47 @@ func ProcessInjest(m interface{}) (map[string]interface{}, error) {
 	return result, nil
 }
 
-func AnnotateYaml(m map[string]interface{}) {
+func PrintYamlLine(key string, value interface{}, comment string) {
+
+	//	fmt.Printf("%T %v\n", value, value)
+
+	if len(comment) == 0 {
+
+		switch value.(type) {
+		case []interface{}:
+			fmt.Printf("\n# %v\n%v:\n", comment, key)
+			b, _ := yaml.Marshal(value)
+			fmt.Println(string(b))
+		default:
+			fmt.Printf("%v: %v\n", key, value)
+		}
+		return
+	}
+	if comment[0] == '-' { // if first char is '-' put comment after yaml
+		switch value.(type) {
+		case []interface{}:
+			fmt.Printf("\n# %v\n%v:\n", comment, key)
+			b, _ := yaml.Marshal(value)
+			fmt.Println(string(b))
+			//fmt.Printf("MAP:%v: %v  #%v\n", key, value, comment)
+		default:
+			fmt.Printf("%v: %v  #%v\n", key, value, comment)
+		}
+	} else {
+		switch value.(type) {
+		case []interface{}:
+
+			fmt.Printf("\n# %v\n%v:\n", comment, key)
+			b, _ := yaml.Marshal(value)
+			fmt.Println(string(b))
+		default:
+			fmt.Printf("\n# %v\n%v: %v\n", comment, key, value)
+		}
+
+	}
+}
+
+func OutputYaml(m map[string]interface{}, simple bool, annotate bool) {
 
 	// Rip out keys into a slice so we can sort it.
 	sortedKeys := make([]string, 0)
@@ -197,17 +240,44 @@ func AnnotateYaml(m map[string]interface{}) {
 		fmt.Println(err)
 	}
 
-	// iterate over the keys
-	for _, k := range sortedKeys {
-
-		if comment, ok := help[k]; ok {
-			fmt.Printf("\n# %v\n%v: %v\n", comment, k, m[k])
-		} else {
-			fmt.Printf("%v: %v\n", k, m[k])
-
-		}
+	// Open the dictonary file
+	dict, err := readYaml("dictonary.yml")
+	if err != nil {
+		fmt.Println(err)
 	}
 
+	// iterate over the keys
+	for _, k := range sortedKeys {
+		//fmt.Printf("%v %T\n", m[k], m[k])
+		if comment, ok := help[k]; ok && annotate { // Add comments
+			if simpleKey, correct := dict[k].(string); correct && simple {
+				// swap opsmgrKey for simplified key
+				PrintYamlLine(simpleKey, m[k], comment.(string))
+				// if comment.(string)[0] == '-' { // if first char is '-' put comment after yaml
+				// 	fmt.Printf("%v: %v  #%v\n", simpleKey, m[k], comment)
+				// } else {
+				// 	fmt.Printf("\n# %v\n%v: %v\n", comment, simpleKey, m[k])
+				// }
+			} else {
+				// Could be a collection, nil
+				PrintYamlLine(k, m[k], comment.(string))
+				/*if comment.(string)[0] == '-' { // if first char is '-' put comment after yaml
+					fmt.Printf("%v: %v  #%s\n", k, m[k], comment)
+				} else {
+					fmt.Printf("\n# %v\n%v: %v\n", comment, k, m[k])
+				}*/
+			}
+		} else {
+			if simpleKey, correct := dict[k].(string); correct && simple {
+				// swap opsmgrKey for simplified key
+				//fmt.Printf("%v: %v\n", simpleKey, m[k])
+				PrintYamlLine(simpleKey, m[k], "")
+			} else {
+				//fmt.Printf("%v: %v\n", k, m[k])
+				PrintYamlLine(k, m[k], "")
+			}
+		}
+	}
 }
 
 func OldProcessInjest(m interface{}) {
