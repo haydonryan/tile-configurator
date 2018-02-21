@@ -245,7 +245,7 @@ func OutputYaml(m map[string]interface{}, simple bool, annotate bool) {
 
 	// Open the dictonary file
 	dict := dictionary.NewDictionary()
-	err = dict.LoadDictionary("dictonary.yml")
+	err = dict.LoadDictionary("dictionary.yml")
 	if err != nil {
 		fmt.Println(err)
 	}

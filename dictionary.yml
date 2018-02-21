@@ -1,0 +1,94 @@
+---
+# Things we care about:
+# Help Text from Tile
+# Possible Parameters for the option
+# Format we need the option in (maybe example)
+# Compliance  - i.e. Must be enabled for PCI compliance
+
+
+".properties.syslog.enabled.port": "syslog_port"
+#".properties.optional_protections":                                "If Disabled, you must set MySQL Monitor Node Instances to 0 in the \"Resource Config\" pane at left."
+#".properties.optional_protections.enable.canary_poll_frequency":   "How frequently the canary checks for replication failure, in seconds. Lower numbers will cause the canary to run more frequently, adding load to the database."
+#".properties.optional_protections.enable.canary_write_read_delay": "How long the canary waits to verify data is replicating across each MySQL node, in seconds. Clusters under heavily load will experience 
+
+".properties.optional_protections.enable.recipient_email":         "email_notification"
+
+
+# .cf-mysql-broker.bind_hostname: <nil>
+# .cf-mysql-broker.quota_enforcer_pause: 30
+# .mysql.allow_local_infile: true
+# .mysql.allow_remote_admin_access: false
+# .mysql.binlog_expire_days: 7
+# .mysql.cli_history: true
+# .mysql.cluster_name: cf-mariadb-galera-cluster
+# .mysql.cluster_probe_timeout: 10
+# .mysql.innodb_large_prefix_enabled: true
+# .mysql.innodb_strict_mode: true
+# .mysql.max_connections: 1500
+# .mysql.metrics_polling_frequency: 30
+# .mysql.mysql_start_timeout: 60
+# .mysql.roadmin_password: password
+# .mysql.skip_name_resolve: true
+# .mysql.table_definition_cache: 8192
+# .mysql.table_open_cache: 2000
+# .mysql.tmp_table_size: 33554432
+# .mysql.wsrep_debug: true
+# .properties.backup_options: disable
+# .properties.backup_options.enable.backup_all_masters: true
+# .properties.backup_options.enable.cron_schedule: <nil>
+.properties.backups: backups
+
+.properties.backups.azure.base_url: azure_backup_base_url
+.properties.backups.azure.container: azure_backup_container
+.properties.backups.azure.container_path: azure_backup_stir
+.properties.backups.azure.storage_access_key: azure_backup_storage_account_key
+.properties.backups.azure.storage_account: azure_backup_storage_account_name
+
+.properties.backups.enable.access_key_id: s3_backup_access_key
+.properties.backups.enable.bucket_name: s3_backup_bucket_name
+.properties.backups.enable.bucket_path: s3_backup_bucket_path
+# .properties.backups.enable.endpoint_url: <nil>
+# .properties.backups.enable.region: <nil>
+# #.properties.backups.enable.secret_access_key: ***
+
+# .properties.backups.gcs.bucket_name: <nil>
+# .properties.backups.gcs.project_id: <nil>
+# #.properties.backups.gcs.service_account_json: ***
+
+# .properties.backups.scp.destination: <nil>
+# .properties.backups.scp.port: 22
+# .properties.backups.scp.scp_key: <nil>
+# .properties.backups.scp.server: <nil>
+# .properties.backups.scp.user: <nil>
+
+# .properties.buffer_pool_size: percent
+# .properties.buffer_pool_size.bytes.buffer_pool_size_bytes: 0
+# .properties.buffer_pool_size.percent.buffer_pool_size_percent: 50
+# .properties.optional_protections: enable
+# .properties.optional_protections.enable.canary_poll_frequency: 30
+# .properties.optional_protections.enable.canary_write_read_delay: 20
+# .properties.optional_protections.enable.notify_only: false
+# .properties.optional_protections.enable.prevent_auto_rejoin: false
+# .properties.optional_protections.enable.recipient_email: <nil>
+# .properties.optional_protections.enable.replication_canary: true
+# .properties.plan_collection: plan_collection
+# .properties.server_activity_logging: enable
+# .properties.server_activity_logging.enable.audit_logging_events: connect,query
+# .properties.server_activity_logging.enable.server_audit_excluded_users_csv: <nil>
+.properties.syslog: "syslog"
+# .properties.syslog.enabled.address: <nil>
+# .properties.syslog.enabled.port: 6514
+# .proxy.shutdown_delay: 0
+# .proxy.startup_delay: 0
+.proxy.static_ips: proxy_static_ips
+
+
+
+
+# -------------------
+# Mysql 1.9.18
+# -------------------
+.cf-mysql-broker.allow_table_locks: "broker_table_locks"
+.mysql.mysql_backup_server_certificate: "XXXXXX"
+.properties.innodb_flush_log_at_trx_commit: "flush_log_at_trx_commit"
+.properties.syslog.enabled.protocol: "syslog_protocol"
