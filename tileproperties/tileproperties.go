@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 
 	"github.com/Navops/yaml"
 )
@@ -31,7 +30,7 @@ func (t *TileProperties) ReadJSON(filename string) (map[string]interface{}, erro
 	m := make(map[string]interface{})
 	err = json.Unmarshal([]byte(base), &m)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		//log.Fatalf("error: %v", err)
 		return nil, fmt.Errorf("Could not unmartshall File")
 	}
 	t.Properties = m
@@ -50,7 +49,7 @@ func (t *TileProperties) ReadYAML(filename string) (map[string]interface{}, erro
 	m := make(map[string]interface{})
 	err = yaml.Unmarshal([]byte(base), &m)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		//log.Fatalf("error: %v", err)
 		return nil, fmt.Errorf("Could not unmartshall File")
 	}
 	t.Properties = m

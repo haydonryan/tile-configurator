@@ -10,24 +10,56 @@ import (
 )
 
 var _ = Describe("Properties", func() {
-	It("Can create a properties interface", func() {
-		m := NewTileProperties()
-		Expect(m).ShouldNot(BeNil())
+	Context("Setup", func() {
+
+		It("Can create a properties interface", func() {
+			m := NewTileProperties()
+			Expect(m).ShouldNot(BeNil())
+		})
 	})
 	Context("Input", func() {
-		It("Can  read a YAML file", func() {
-			m := NewTileProperties()
-			m.ReadYAML("fixtures/types.yml")
-			Expect(m).ShouldNot(BeNil())
-			Expect(m.Properties[".properties.optional_protections.enable.canary_poll_frequency"]).Should(Equal(69))
+
+		Context("YAML", func() {
+			It("will throw an error if the file fails to load", func() {
+				m := NewTileProperties()
+				_, err := m.ReadYAML("invalid")
+				Expect(err).ShouldNot(BeNil())
+			})
+
+			It("will throw an error if the file is invalid", func() {
+				m := NewTileProperties()
+				_, err := m.ReadYAML("fixtures/invalid.yaml")
+				Expect(err).ShouldNot(BeNil())
+			})
+
+			It("Can read a YAML file", func() {
+				m := NewTileProperties()
+				m.ReadYAML("fixtures/types.yml")
+				Expect(m).ShouldNot(BeNil())
+				Expect(m.Properties[".properties.optional_protections.enable.canary_poll_frequency"]).Should(Equal(69))
+			})
+		})
+		Context("JSON", func() {
+			It("will throw an error if the file fails to load", func() {
+				m := NewTileProperties()
+				_, err := m.ReadJSON("invalid")
+				Expect(err).ShouldNot(BeNil())
+			})
+
+			It("will throw an error if the file is invalid", func() {
+				m := NewTileProperties()
+				_, err := m.ReadJSON("fixtures/invalid.json")
+				Expect(err).ShouldNot(BeNil())
+			})
+
+			It("Can  read a JSON file", func() {
+				m := NewTileProperties()
+				m.ReadJSON("fixtures/types.json")
+				Expect(m.Properties["properties"]).ShouldNot(BeNil())
+			})
 
 		})
-		It("Can  read a JSON file", func() {
-			m := NewTileProperties()
-			m.ReadJSON("fixtures/types.json")
-			//Expect(m).Should(ContainElement(".properties.backup_options"))
-			Expect(m.Properties["properties"]).ShouldNot(BeNil())
-		})
+
 	})
 
 })
