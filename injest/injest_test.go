@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	. "github.com/haydonryan/tile-configurator/injest"
+	"github.com/haydonryan/tile-configurator/tileproperties"
 	"github.com/xchapter7x/lo"
 
 	. "github.com/onsi/ginkgo"
@@ -24,7 +25,9 @@ var _ = Describe("Injest", func() {
 
 		It("should remove the properties key", func() {
 			filename := "fixtures/types.json"
-			input, err := ReadJSON(filename)
+
+			tile := tileproperties.NewTileProperties()
+			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
 			result, err := ProcessInjest(input)
@@ -36,7 +39,8 @@ var _ = Describe("Injest", func() {
 
 		It("should contain a subkey and return copy the 'value field' as the key's value if it is a selector", func() { //ie .properties.backup_options
 			filename := "fixtures/types.json"
-			input, err := ReadJSON(filename)
+			tile := tileproperties.NewTileProperties()
+			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
 			result, err := ProcessInjest(input)
@@ -46,7 +50,8 @@ var _ = Describe("Injest", func() {
 
 		It("should ignore properties that are not configurable", func() { //ie .properties.backup_options
 			filename := "fixtures/two.json"
-			input, err := ReadJSON(filename)
+			tile := tileproperties.NewTileProperties()
+			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
 			result, err := ProcessInjest(input)
@@ -56,7 +61,8 @@ var _ = Describe("Injest", func() {
 
 		It("should process integers", func() { //ie .properties.backup_options
 			filename := "fixtures/types.json"
-			input, err := ReadJSON(filename)
+			tile := tileproperties.NewTileProperties()
+			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
 			result, err := ProcessInjest(input)
@@ -66,7 +72,8 @@ var _ = Describe("Injest", func() {
 		})
 		It("should process strings", func() { //ie .properties.backup_options
 			filename := "fixtures/types.json"
-			input, err := ReadJSON(filename)
+			tile := tileproperties.NewTileProperties()
+			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
 			result, err := ProcessInjest(input)
@@ -78,7 +85,8 @@ var _ = Describe("Injest", func() {
 		Context("Collections", func() {
 			It("should be a map of an array", func() {
 				filename := "fixtures/types.json"
-				input, err := ReadJSON(filename)
+				tile := tileproperties.NewTileProperties()
+				input, err := tile.ReadJSON(filename)
 				Expect(err).To(BeNil())
 
 				result, err := ProcessInjest(input)
@@ -92,7 +100,8 @@ var _ = Describe("Injest", func() {
 
 			It("deals with values that are nil", func() {
 				filename := "fixtures/two.json"
-				input, err := ReadJSON(filename)
+				tile := tileproperties.NewTileProperties()
+				input, err := tile.ReadJSON(filename)
 				Expect(err).To(BeNil())
 
 				result, err := ProcessInjest(input)
