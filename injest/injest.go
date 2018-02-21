@@ -24,8 +24,10 @@ func (c *Injest) Execute([]string) error {
 	base, _ := ReadJSON(c.InputFile)
 	result, _ := ProcessInjest(base)
 	b, _ := yaml.Marshal(result)
-	fmt.Println("---------")
+
 	fmt.Println(string(b))
+	fmt.Println("----------")
+	AnnotateYaml(result)
 
 	return nil
 }
@@ -149,6 +151,21 @@ func ProcessInjest(m interface{}) (map[string]interface{}, error) {
 				result[k], _ = CreateCollections(v)
 
 			//case "selector":
+			case "simple_credentials":
+				fmt.Println("simple_credentials")
+				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
+					result[k] = property["value"].(map[string]interface{})["password"]
+				}
+
+			case "string_list":
+				fmt.Println("string_list not implemented yet")
+			case "rsa_cert_credentials":
+				fmt.Println("rsa_cert_credentials not implemented yet")
+			case "secret":
+				fmt.Println("Secret")
+				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
+					result[k] = property["value"].(map[string]interface{})["secret"]
+				}
 
 			default: // strings
 				if property["configurable"] == true { // ignore unconfigurable elements (note creds)
@@ -163,6 +180,34 @@ func ProcessInjest(m interface{}) (map[string]interface{}, error) {
 		return nil, errors.New("parameter passed was incorrect")
 	}
 	return result, nil
+}
+
+func AnnotateYaml(m map[string]interface{}) {
+
+	// Rip out keys into a slice so we can sort it.
+	sortedKeys := make([]string, 0)
+	for l, _ := range m {
+		sortedKeys = append(sortedKeys, l)
+	}
+	sort.Strings(sortedKeys)
+
+	// Open the help file
+	help, err := readYaml("help.yml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// iterate over the keys
+	for _, k := range sortedKeys {
+
+		if comment, ok := help[k]; ok {
+			fmt.Printf("\n# %v\n%v: %v\n", comment, k, m[k])
+		} else {
+			fmt.Printf("%v: %v\n", k, m[k])
+
+		}
+	}
+
 }
 
 func OldProcessInjest(m interface{}) {
