@@ -184,7 +184,7 @@
             "type": "uuid",
             "configurable": false,
             "credential": false,
-            "value": "20d4bd2b-28b8-49f2-a5ce-4301b5b001f0",
+            "value": "4275e772-fbc0-4888-98d5-ed1cf67a3a83",
             "optional": false
           },
           "name": {
@@ -237,7 +237,7 @@
       "type": "email",
       "configurable": true,
       "credential": false,
-      "value": "haydon.ryan@gmail.com",
+      "value": null,
       "optional": false
     },
     ".properties.optional_protections.enable.prevent_auto_rejoin": {
@@ -265,7 +265,7 @@
       "type": "integer",
       "configurable": true,
       "credential": false,
-      "value": 69,
+      "value": 30,
       "optional": false
     },
     ".properties.optional_protections.enable.canary_write_read_delay": {
@@ -328,7 +328,7 @@
       "type": "selector",
       "configurable": true,
       "credential": false,
-      "value": "disabled",
+      "value": "enabled",
       "optional": false
     },
     ".properties.syslog.enabled.address": {

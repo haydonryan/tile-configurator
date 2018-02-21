@@ -184,7 +184,7 @@
             "type": "uuid",
             "configurable": false,
             "credential": false,
-            "value": "20d4bd2b-28b8-49f2-a5ce-4301b5b001f0",
+            "value": "4275e772-fbc0-4888-98d5-ed1cf67a3a83",
             "optional": false
           },
           "name": {
@@ -275,6 +275,13 @@
       "value": 20,
       "optional": false
     },
+    ".properties.innodb_flush_log_at_trx_commit": {
+      "type": "selector",
+      "configurable": true,
+      "credential": false,
+      "value": "two",
+      "optional": false
+    },
     ".properties.server_activity_logging": {
       "type": "selector",
       "configurable": true,
@@ -295,20 +302,6 @@
       "credential": false,
       "value": null,
       "optional": true
-    },
-    ".properties.one_property": {
-      "type": "integer",
-      "configurable": false,
-      "credential": false,
-      "value": 1,
-      "optional": false
-    },
-    ".properties.zero_property": {
-      "type": "integer",
-      "configurable": false,
-      "credential": false,
-      "value": 0,
-      "optional": false
     },
     ".properties.true_property": {
       "type": "boolean",
@@ -344,6 +337,27 @@
       "credential": false,
       "value": 6514,
       "optional": false
+    },
+    ".properties.syslog.enabled.protocol": {
+      "type": "dropdown_select",
+      "configurable": true,
+      "credential": false,
+      "value": "tcp",
+      "optional": true,
+      "options": [
+        {
+          "label": "TCP protocol",
+          "value": "tcp"
+        },
+        {
+          "label": "UDP protocol",
+          "value": "udp"
+        },
+        {
+          "label": "RELP protocol",
+          "value": "relp"
+        }
+      ]
     },
     ".properties.buffer_pool_size": {
       "type": "selector",
@@ -393,6 +407,15 @@
       "credential": true,
       "value": {
         "password": "***"
+      },
+      "optional": false
+    },
+    ".mysql.mysql_backup_server_certificate": {
+      "type": "rsa_cert_credentials",
+      "configurable": false,
+      "credential": true,
+      "value": {
+        "private_key_pem": "***"
       },
       "optional": false
     },
@@ -451,13 +474,6 @@
       "optional": false
     },
     ".mysql.innodb_large_prefix_enabled": {
-      "type": "boolean",
-      "configurable": true,
-      "credential": false,
-      "value": true,
-      "optional": false
-    },
-    ".mysql.wsrep_debug": {
       "type": "boolean",
       "configurable": true,
       "credential": false,
@@ -712,6 +728,13 @@
       "configurable": true,
       "credential": false,
       "value": 30,
+      "optional": false
+    },
+    ".cf-mysql-broker.allow_table_locks": {
+      "type": "boolean",
+      "configurable": true,
+      "credential": false,
+      "value": true,
       "optional": false
     },
     ".cf-mysql-broker.broker_name": {
