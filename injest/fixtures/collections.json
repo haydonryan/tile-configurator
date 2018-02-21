@@ -1,0 +1,101 @@
+{
+  "properties": {
+    ".properties.plan_collection": {
+      "type": "collection",
+      "configurable": true,
+      "credential": false,
+      "value": [
+        {
+          "guid": {
+            "type": "uuid",
+            "configurable": false,
+            "credential": false,
+            "value": "20d4bd2b-28b8-49f2-a5ce-4301b5b001f0",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "100mb",
+            "optional": false
+          },
+          "description": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "100MB default",
+            "optional": false
+          },
+          "max_storage_mb": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 100,
+            "optional": false
+          },
+          "max_user_connections": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 40,
+            "optional": false
+          },
+          "private": {
+            "type": "boolean",
+            "configurable": true,
+            "credential": false,
+            "value": false,
+            "optional": false
+          }
+        },
+        {
+          "guid": {
+            "type": "uuid",
+            "configurable": false,
+            "credential": false,
+            "value": "20d4bd2b-28b8-49f2-a5ce-4301b5b001f0",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "200MB",
+            "optional": false
+          },
+          "description": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "200MB default",
+            "optional": false
+          },
+          "max_storage_mb": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 100,
+            "optional": false
+          },
+          "max_user_connections": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 40,
+            "optional": false
+          },
+          "private": {
+            "type": "boolean",
+            "configurable": true,
+            "credential": false,
+            "value": false,
+            "optional": false
+          }
+        }
+       
+      ],
+      "optional": false
+    }
+  }
+}

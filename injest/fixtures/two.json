@@ -1,0 +1,25 @@
+{
+  "properties": {
+    ".properties.backup_options": {
+      "type": "selector",
+      "configurable": true,
+      "credential": false,
+      "value": "enable",
+      "optional": false
+    },
+    ".properties.backup_value": {
+      "type": "selector",
+      "configurable": false,
+      "credential": false,
+      "value": "enable",
+      "optional": false
+    },
+    ".properties.buffer_pool_size.bytes.buffer_pool_size_bytes": {
+      "type": "integer",
+      "configurable": true,
+      "credential": false,
+      "value": null,
+      "optional": false
+    }
+  }
+}

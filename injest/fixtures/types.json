@@ -1,0 +1,185 @@
+{
+  "properties": {
+    ".properties.backup_options": {
+      "type": "selector",
+      "configurable": true,
+      "credential": false,
+      "value": "enable",
+      "optional": false
+    },
+    ".properties.backup_options.enable.cron_schedule": {
+      "type": "string",
+      "configurable": true,
+      "credential": false,
+      "value": "stringvalue",
+      "optional": false
+    },
+    ".properties.backup_options.enable.backup_all_masters": {
+      "type": "boolean",
+      "configurable": true,
+      "credential": false,
+      "value": true,
+      "optional": false
+    }, 
+    ".properties.backups.scp.scp_key": {
+      "type": "text",
+      "configurable": true,
+      "credential": false,
+      "value": null,
+      "optional": false
+    },
+    ".properties.backups.scp.port": {
+      "type": "integer",
+      "configurable": true,
+      "credential": false,
+      "value": 22,
+      "optional": true
+    },
+    ".properties.optional_protections.enable.recipient_email": {
+      "type": "email",
+      "configurable": true,
+      "credential": false,
+      "value": "haydonryan@gmail.com",
+      "optional": false
+    },
+
+    ".properties.plan_collection": {
+      "type": "collection",
+      "configurable": true,
+      "credential": false,
+      "value": [
+        {
+          "guid": {
+            "type": "uuid",
+            "configurable": false,
+            "credential": false,
+            "value": "20d4bd2b-28b8-49f2-a5ce-4301b5b001f0",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "100mb",
+            "optional": false
+          },
+          "description": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "100MB default",
+            "optional": false
+          },
+          "max_storage_mb": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 100,
+            "optional": false
+          },
+          "max_user_connections": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 40,
+            "optional": false
+          },
+          "private": {
+            "type": "boolean",
+            "configurable": true,
+            "credential": false,
+            "value": false,
+            "optional": false
+          }
+        },
+        {
+          "guid": {
+            "type": "uuid",
+            "configurable": false,
+            "credential": false,
+            "value": "20d4bd2b-28b8-49f2-a5ce-4301b5b001f0",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "200MB",
+            "optional": false
+          },
+          "description": {
+            "type": "string",
+            "configurable": true,
+            "credential": false,
+            "value": "200MB default",
+            "optional": false
+          },
+          "max_storage_mb": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 100,
+            "optional": false
+          },
+          "max_user_connections": {
+            "type": "integer",
+            "configurable": true,
+            "credential": false,
+            "value": 40,
+            "optional": false
+          },
+          "private": {
+            "type": "boolean",
+            "configurable": true,
+            "credential": false,
+            "value": false,
+            "optional": false
+          }
+        }
+       
+      ],
+      "optional": false
+    },
+
+
+    ".proxy.dashboard_credentials": {
+      "type": "simple_credentials",
+      "configurable": false,
+      "credential": true,
+      "value": {
+        "identity": "admin",
+        "password": "1234"
+      },
+      "optional": false
+    },
+    ".proxy.static_ips": {
+      "type": "ip_ranges",
+      "configurable": true,
+      "credential": false,
+      "value": null,
+      "optional": true
+    },
+
+    ".backup-prepare.vm_credentials": {
+      "type": "salted_credentials",
+      "configurable": false,
+      "credential": true,
+      "value": {
+        "identity": "vcap",
+        "password": "***",
+        "salt": "***"
+      },
+      "optional": false
+    },
+
+     ".properties.backups.enable.secret_access_key": {
+      "type": "secret",
+      "configurable": true,
+      "credential": true,
+      "value": {
+        "secret": "***"
+      },
+      "optional": false
+    }
+}
+}
