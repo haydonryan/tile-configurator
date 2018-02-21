@@ -55,7 +55,18 @@ func (c *Deploy) Execute([]string) error {
 			}
 
 		} else {
-			properties := fmt.Sprintf("{\"%v\": {\"value\":  \"%v\"}}\n", key, value)
+			properties := fmt.Sprintf("{\"%v\": {\"value\":  %v}}\n", key, value)
+			str, correct := value.(string)
+
+			if correct {
+
+				if str[0] == '{' { //it's a json block - saves me doing hashed values for now.
+					properties = fmt.Sprintf("{\"%v\": {\"value\":  %v}}\n", key, value)
+				} else {
+					properties = fmt.Sprintf("{\"%v\": {\"value\":  \"%v\"}}\n", key, value)
+				}
+			}
+
 			fmt.Printf("Applying setting %v to tile %v......", key, string(c.Tile))
 			//runCommand(value, string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile))
 			if GlobalOptions.useKeyAndSecret {
