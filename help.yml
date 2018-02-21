@@ -4,11 +4,101 @@
 # Possible Parameters for the option
 # Format we need the option in (maybe example)
 # Compliance  - i.e. Must be enabled for PCI compliance
+# links to documentation
 
-".properties.syslog":              "Syslog Forwarding\n -----------------\n Choose either enabled or disbled"
-".properties.syslog.enabled.port": "The port for syslog"
-".properties.optional_protections":                                "If Disabled, you must set MySQL Monitor Node Instances to 0 in the \"Resource Config\" pane at left."
-".properties.optional_protections.enable.canary_poll_frequency":   "How frequently the canary checks for replication failure, in seconds. Lower numbers will cause the canary to run more frequently, adding load to the database."
-".properties.optional_protections.enable.canary_write_read_delay": "How long the canary waits to verify data is replicating across each MySQL node, in seconds. Clusters under heavily load will experience some small replication lag as writesets are committed across the nodes."
-".properties.optional_protections.enable.recipient_email":         "The MySQL service will send alerts when the cluster experiences a replication issue or a node is not allowed to auto-rejoin the cluster."
+# keys will always be in alphabetical order
+
+# ".properties.syslog":              "Syslog Forwarding\n -----------------\n Choose either enabled or disbled"
+# ".properties.syslog.enabled.port": "The port for syslog"
+# ".properties.optional_protections":                                "If Disabled, you must set MySQL Monitor Node Instances to 0 in the \"Resource Config\" pane at left."
+# ".properties.optional_protections.enable.canary_poll_frequency":   "How frequently the canary checks for replication failure, in seconds. Lower numbers will cause the canary to run more frequently, adding load to the database."
+# ".properties.optional_protections.enable.canary_write_read_delay": "How long the canary waits to verify data is replicating across each MySQL node, in seconds. Clusters under heavily load will experience some small replication lag as writesets are committed across the nodes."
+# ".properties.optional_protections.enable.recipient_email":         "The MySQL service will send alerts when the cluster experiences a replication issue or a node is not allowed to auto-rejoin the cluster."
 ".properties.syslog.enabled.port": "syslog port"
+
+# MySQL Properties:
+
+.cf-mysql-broker.bind_hostname: "====================================\n# MySQL v1.9 GENERATED Parameters\n# ====================================\n\n# =================================\n# MySQL Server Configuration\n# ================================="
+.cf-mysql-broker.quota_enforcer_pause: "- Configure how many seconds the Quota Enforcer pauses between polls. Advanced configuration, please read the documentation before modifying. (default 30)"
+# .mysql.allow_local_infile: true
+# .mysql.allow_remote_admin_access: false
+# .mysql.binlog_expire_days: 7
+# .mysql.cli_history: true
+.mysql.cluster_name: "- Cluster name of the MySQL cluster - do not change when upgrading!"
+# .mysql.cluster_probe_timeout: 10
+# .mysql.innodb_large_prefix_enabled: true
+# .mysql.innodb_strict_mode: true
+# .mysql.max_connections: 1500
+.mysql.metrics_polling_frequency: "- Select the polling interval for MySQL metrics in seconds"
+# .mysql.mysql_start_timeout: 60
+# .mysql.roadmin_password: ***
+# .mysql.skip_name_resolve: true
+# .mysql.table_definition_cache: 8192
+# .mysql.table_open_cache: 2000
+# .mysql.tmp_table_size: 33554432
+# .mysql.wsrep_debug: true
+
+.properties.backup_options: "==============\n# Enable Backups\n# ==============\n# Choose (disable  | enable)\n# (Note: If you choose disable then you also need to set backup prepare node instances to 0 in resources.)"
+.properties.backup_options.enable.backup_all_masters: "- Each node is a duplicate master. This option makes unique backups from each master, rather than from a single instance."
+.properties.backup_options.enable.cron_schedule: "- Cron Schedule (See http://godoc.org/github.com/robfig/cron)"
+
+.properties.backups: "==============\n# Set Backup Destination\n# ==============\n# Choose (disable  | enable | azure | gcs | scp)\n# (Note enable means enable s3)"
+.properties.backups.azure.base_url: "- URL of Azure BlobStore"
+.properties.backups.azure.container: "- Azure Container Name"
+.properties.backups.azure.container_path: "- Azure Container Name"
+.properties.backups.azure.storage_access_key: "- Azure Storage Access Key"
+.properties.backups.azure.storage_account: "- Azure Storage Account Name\n"
+.properties.backups.enable.access_key_id: "- S3 Access Key"
+.properties.backups.enable.bucket_name: "- Bucket Name"
+.properties.backups.enable.bucket_path: "- Bucket Path"
+.properties.backups.enable.endpoint_url: "- S3 Endpoint "
+.properties.backups.enable.region: "- S3 region (If using AWS S3, this field is required for any non us-east-1 regions)"
+.properties.backups.enable.secret_access_key: "- S3 secret key\n"
+
+.properties.backups.gcs.bucket_name: "- GCS bucket name"
+.properties.backups.gcs.project_id: "- GCS project ID"
+.properties.backups.gcs.service_account_json: "- Service account must have Storage Admin IAM permissions. See documentation for how to generate the JSON key."
+
+
+.properties.backups.scp.destination: "- Destination directory"
+.properties.backups.scp.port: "- SCP Port"
+.properties.backups.scp.scp_key: "- Private SSH Key for access (Do not password protect)"
+.properties.backups.scp.server: "- Hostname / IP Address"
+.properties.backups.scp.user: "- Username"
+
+# .properties.buffer_pool_size: percent
+# .properties.buffer_pool_size.bytes.buffer_pool_size_bytes: 0
+# .properties.buffer_pool_size.percent.buffer_pool_size_percent: 50
+
+
+.properties.optional_protections: "============================\n# Optional Protections\n# ============================\n# Choose (enabled  | disabled)\n# If you enable this option you must set Replication Canary Time period, Rep Canary read delay and email address\n"
+# .properties.optional_protections.enable.canary_poll_frequency: 30
+# .properties.optional_protections.enable.canary_write_read_delay: 20
+.properties.optional_protections.enable.notify_only: "- setting this is optional (true | false)"
+.properties.optional_protections.enable.prevent_auto_rejoin: "- setting this is optional (true | false)"
+# .properties.optional_protections.enable.recipient_email: <nil>
+# .properties.optional_protections.enable.replication_canary: true
+
+
+.properties.plan_collection: "============================\n# MySQL Plans \n# ============================\n"
+
+#.properties.server_activity_logging: enable
+#.properties.server_activity_logging.enable.audit_logging_events: connect,query
+# .properties.server_activity_logging.enable.server_audit_excluded_users_csv: <nil>
+
+".properties.syslog": "============================\n# Syslog Forwarding\n# ============================\n\n#Choose (enabled  | disabled)"
+.properties.syslog.enabled.address: "- Syslog Address"
+#.properties.syslog.enabled.port: 6514
+
+#.proxy.shutdown_delay: 0
+# .proxy.startup_delay: 0
+# .proxy.static_ips: <nil>
+
+
+# -------------------
+# Mysql 1.9.18
+# -------------------
+.cf-mysql-broker.allow_table_locks: "- (false | true) Allow MySQL clients to lock tables. Advanced configuration, please read the documentation before changing."
+.mysql.mysql_backup_server_certificate: "- THIS IS NOT CONFIGURABLE - do not set - it will be stripped from ymaml"
+.properties.innodb_flush_log_at_trx_commit: "- ( zero | one | two )"
+.properties.syslog.enabled.protocol: "- ( tcp | udp | relp) "
