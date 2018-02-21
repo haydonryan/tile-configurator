@@ -27,32 +27,31 @@ type Deploy struct {
 
 func (c *Deploy) Execute([]string) error {
 
-	if string(c.Key) != "" {
-		GlobalOptions.useKeyAndSecret = true
-	}
 	// Open the properties file
 	yaml, err := readYaml(string(c.Filename))
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
+	var username string
+	var password string
+
+	if len(c.Key) != 0 {
+		username = string(c.Key)
+		password = string(c.Secret)
+	} else {
+		username = string(c.Username)
+		password = string(c.Password)
+	}
 
 	// Parse through the map and process keys as either individual, collections and groups
 	for key, value := range yaml {
 		if key == "collections" {
 			lo.G.Debug("Found collections")
-			if GlobalOptions.useKeyAndSecret {
-				c.processAllCollection(value, string(c.URL), string(c.Key), string(c.Secret), string(c.Tile))
-			} else {
-				c.processAllCollection(value, string(c.URL), string(c.Username), string(c.Password), string(c.Tile))
-			}
+			c.processAllCollection(value, string(c.URL), username, password, string(c.Tile))
 		} else if key == "groups" {
 			lo.G.Debug("Found groups block")
-			if GlobalOptions.useKeyAndSecret {
-				c.processGroup(value, string(c.URL), string(c.Key), string(c.Secret), string(c.Tile))
-			} else {
-				c.processGroup(value, string(c.URL), string(c.Username), string(c.Password), string(c.Tile))
-			}
+			c.processGroup(value, string(c.URL), username, password, string(c.Tile))
 
 		} else {
 			properties := fmt.Sprintf("{\"%v\": {\"value\":  %v}}\n", key, value)
@@ -69,12 +68,9 @@ func (c *Deploy) Execute([]string) error {
 
 			fmt.Printf("Applying setting %v to tile %v......", key, string(c.Tile))
 			//runCommand(value, string(opts.URL), string(opts.Username), string(opts.Password), string(opts.Tile))
-			if GlobalOptions.useKeyAndSecret {
-				c.runCommand(string(c.URL), string(c.Key), string(c.Secret), string(c.Tile), properties)
 
-			} else {
-				c.runCommand(string(c.URL), string(c.Username), string(c.Password), string(c.Tile), properties)
-			}
+			c.runCommand(string(c.URL), username, password, string(c.Tile), properties)
+
 			fmt.Printf("Done.\n")
 		}
 	}
@@ -89,10 +85,6 @@ func makeJSON(v interface{}) string {
 		fmt.Println(err)
 	}
 	return string(enc)
-}
-
-var GlobalOptions struct {
-	useKeyAndSecret bool
 }
 
 //each collection block can have multiple collections.
@@ -176,7 +168,7 @@ func (c *Deploy) runCommand(url string, user string, password string, tile strin
 
 	var args []string
 
-	if GlobalOptions.useKeyAndSecret {
+	if len(c.Key) != 0 {
 		fmt.Printf("-----------(%v %v", user, password)
 		args = []string{"-t", url, "-k", "-c", user, "-s", password, "configure-product", "--product-name", tile, "--product-properties", properties}
 	} else {
