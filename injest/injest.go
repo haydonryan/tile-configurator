@@ -252,21 +252,17 @@ func OutputYaml(m map[string]interface{}, simple bool, annotate bool) {
 
 	// iterate over the keys
 	for _, key := range sortedKeys {
-
-		if comment, ok := help.Lookup[key]; ok && annotate { // Add comments
-
-			if simpleKey, correct := dict.Lookup[key]; correct && simple {
-				// swap opsmgrKey for simplified key
-				PrintYamlLine(simpleKey, m[key], comment)
-			} else {
-				PrintYamlLine(key, m[key], comment)
-			}
-		} else {
-			if simpleKey, correct := dict.Lookup[key]; correct && simple {
-				PrintYamlLine(simpleKey, m[key], "")
-			} else {
-				PrintYamlLine(key, m[key], "")
-			}
+		var comment = ""
+		if annotate {
+			comment = help.Lookup[key]
 		}
+
+		if simpleKey, correct := dict.Lookup[key]; correct && simple {
+			// swap opsmgrKey for simplified key
+			PrintYamlLine(simpleKey, m[key], comment)
+		} else {
+			PrintYamlLine(key, m[key], comment)
+		}
+
 	}
 }
