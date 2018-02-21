@@ -42,13 +42,13 @@ var _ = Describe("Dictionary", func() {
 		d := NewDictionary()
 		d.LoadDictionary("fixtures/test.yml")
 
-		Expect(d.Simple[".properties.syslog.enabled.port"]).Should(Equal("syslog_port"))
+		Expect(d.Lookup[".properties.syslog.enabled.port"]).Should(Equal("syslog_port"))
 
 	})
 	It("dictionary should have populated Opsman with reverse lookup", func() {
 		d := NewDictionary()
 		d.LoadDictionary("fixtures/test.yml")
-		Expect(d.Opsman["syslog_port"]).Should(Equal(".properties.syslog.enabled.port"))
+		Expect(d.ReverseLookup["syslog_port"]).Should(Equal(".properties.syslog.enabled.port"))
 
 	})
 

@@ -9,8 +9,8 @@ import (
 
 // Dictionary stores two way conversions between simple key names and opsmanager ones
 type Dictionary struct {
-	Simple map[string]string
-	Opsman map[string]string
+	Lookup        map[string]string
+	ReverseLookup map[string]string
 }
 
 // NewDictionary returns a new dictionary literal
@@ -27,13 +27,12 @@ func (dict *Dictionary) LoadDictionary(filename string) error {
 	}
 
 	// Read file into map
-	err = yaml.Unmarshal([]byte(fileContents), &dict.Simple)
+	err = yaml.Unmarshal([]byte(fileContents), &dict.Lookup)
 	if err != nil {
 		return fmt.Errorf("Could not unmartshall File")
 	}
 
-	dict.Opsman = dict.MapReverse(dict.Simple)
-	fmt.Println(dict.Opsman)
+	dict.ReverseLookup = dict.MapReverse(dict.Lookup)
 	return nil
 }
 
