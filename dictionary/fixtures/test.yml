@@ -1,0 +1,2 @@
+".properties.syslog.enabled.port": "syslog_port"
+".properties.optional_protections.enable.recipient_email":         "email_notification"
