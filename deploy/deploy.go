@@ -3,12 +3,10 @@ package deploy
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 
-	"github.com/Navops/yaml"
+	"github.com/haydonryan/tile-configurator/tileproperties"
 	"github.com/xchapter7x/lo"
 )
 
@@ -28,7 +26,11 @@ type Deploy struct {
 func (c *Deploy) Execute([]string) error {
 
 	// Open the properties file
-	yaml, err := readYaml(string(c.Filename))
+	//yaml, err := readYaml(string(c.Filename))
+
+	tile := tileproperties.NewTileProperties()
+
+	yaml, err := tile.ReadYAML(c.Filename)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -189,22 +191,4 @@ func (c *Deploy) runCommand(url string, user string, password string, tile strin
 		lo.G.Debug(string(output))
 	}
 	_ = output
-}
-
-func readYaml(filename string) (map[string]interface{}, error) {
-	// Open the properties file
-	base, err := ioutil.ReadFile(filename)
-	if err != nil {
-		fmt.Println(err)
-		return nil, fmt.Errorf("Could not open File")
-	}
-
-	// Read file into map of interfaces
-	m := make(map[string]interface{})
-	err = yaml.Unmarshal([]byte(base), &m)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-		return nil, fmt.Errorf("Could not unmartshall File")
-	}
-	return m, nil
 }
