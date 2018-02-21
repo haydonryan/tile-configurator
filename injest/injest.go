@@ -1,21 +1,18 @@
 package injest
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"sort"
 
 	"github.com/haydonryan/tile-configurator/dictionary"
+	"github.com/haydonryan/tile-configurator/tileproperties"
 
 	"github.com/Navops/yaml"
 	"github.com/xchapter7x/lo"
 )
 
 /// Injest required for go-flags
-///-----------
 type Injest struct {
 	InputFile string `short:"i" long:"injest" description:"Filename to be injested" required:"true"`
 	Simple    bool   `short:"s" long:"simple" description:"Simplify Keys"`
@@ -25,52 +22,16 @@ type Injest struct {
 /// go-flags callhack entry point
 func (c *Injest) Execute([]string) error {
 
-	base, _ := ReadJSON(c.InputFile)
+	tile := tileproperties.NewTileProperties()
+
+	base, _ := tile.ReadJSON(c.InputFile)
+
+	//base, _ := ReadJSON(c.InputFile)
 	result, _ := ProcessInjest(base)
-	// 	b, _ := yaml.Marshal(result)
-	// fmt.Println(string(b))
-	// fmt.Printf("%v %v", c.Simple, c.Annotate)
-	// fmt.Println("----------")
-	//result = forceSimpleKeys(result)
+
 	OutputYaml(result, c.Simple, c.Annotate)
 
 	return nil
-}
-
-func ReadJSON(filename string) (map[string]interface{}, error) {
-	// Open the properties file
-	base, err := ioutil.ReadFile(filename)
-	if err != nil {
-		fmt.Println(err)
-		return nil, fmt.Errorf("Could not open File")
-	}
-
-	// Read file into map of interfaces
-	m := make(map[string]interface{})
-	err = json.Unmarshal([]byte(base), &m)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-		return nil, fmt.Errorf("Could not unmartshall File")
-	}
-	return m, nil
-}
-
-func readYaml(filename string) (map[string]interface{}, error) {
-	// Open the properties file
-	base, err := ioutil.ReadFile(filename)
-	if err != nil {
-		fmt.Println(err)
-		return nil, fmt.Errorf("Could not open File")
-	}
-
-	// Read file into map of interfaces
-	m := make(map[string]interface{})
-	err = yaml.Unmarshal([]byte(base), &m)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-		return nil, fmt.Errorf("Could not unmartshall File")
-	}
-	return m, nil
 }
 
 var help = map[string]string{}
