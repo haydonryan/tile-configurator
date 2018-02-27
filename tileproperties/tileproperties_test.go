@@ -61,6 +61,18 @@ var _ = Describe("Properties", func() {
 		})
 
 	})
+	Context("Output", func() {
+		Context("JSON", func() {
+			It("Converts the map to a json object", func() {
+				m := NewTileProperties()
+
+				m.Properties["test"] = "testy"
+				str := m.MakeJSON()
+				Expect(str).Should(Equal("{\"test\":\"testy\"}"))
+
+			})
+		})
+	})
 
 })
 

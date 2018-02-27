@@ -14,8 +14,9 @@ type TileProperties struct {
 
 // NewTileProperties () returns a new tile properties interface
 func NewTileProperties() *TileProperties {
-
-	return &TileProperties{}
+	var m = &TileProperties{}
+	m.Properties = make(map[string]interface{})
+	return m
 }
 
 func (t *TileProperties) ReadJSON(filename string) (map[string]interface{}, error) {
@@ -54,4 +55,14 @@ func (t *TileProperties) ReadYAML(filename string) (map[string]interface{}, erro
 	}
 	t.Properties = m
 	return m, nil
+}
+
+func (t *TileProperties) MakeJSON() string {
+
+	var enc []byte
+	enc, err := json.Marshal(t.Properties)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return string(enc)
 }
