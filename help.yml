@@ -18,7 +18,14 @@
 
 # MySQL Properties:
 
-.cf-mysql-broker.bind_hostname: "====================================\n# MySQL v1.9 GENERATED Parameters\n# ====================================\n\n# =================================\n# MySQL Server Configuration\n# ================================="
+.cf-mysql-broker.bind_hostname: | 
+  ====================================
+  # MySQL v1.9 GENERATED Parameters
+  # ====================================
+
+  # =================================
+  # MySQL Server Configuration\n
+  # =================================
 .cf-mysql-broker.quota_enforcer_pause: "- Configure how many seconds the Quota Enforcer pauses between polls. Advanced configuration, please read the documentation before modifying. (default 30)"
 # .mysql.allow_local_infile: true
 # .mysql.allow_remote_admin_access: false
@@ -38,11 +45,17 @@
 # .mysql.tmp_table_size: 33554432
 # .mysql.wsrep_debug: true
 
-.properties.backup_options: "==============\n# Enable Backups\n# ==============\n# Choose (disable  | enable)\n# (Note: If you choose disable then you also need to set backup prepare node instances to 0 in resources.)"
+.properties.backup_options: "==============\n# Enable Backups\n# ==============\n
+  # Choose (disable  | enable)\n# (Note: If you choose disable then you also need to set backup prepare node instances to 0 in resources.)"
 .properties.backup_options.enable.backup_all_masters: "- Each node is a duplicate master. This option makes unique backups from each master, rather than from a single instance."
 .properties.backup_options.enable.cron_schedule: "- Cron Schedule (See http://godoc.org/github.com/robfig/cron)"
 
-.properties.backups: "==============\n# Set Backup Destination\n# ==============\n# Choose (disable  | enable | azure | gcs | scp)\n# (Note enable means enable s3)"
+.properties.backups: |
+  # ==============
+  # Set Backup Destination
+  # ==============
+  # Choose (disable  | enable | azure | gcs | scp)
+  # (Note enable means enable s3)
 .properties.backups.azure.base_url: "- URL of Azure BlobStore"
 .properties.backups.azure.container: "- Azure Container Name"
 .properties.backups.azure.container_path: "- Azure Container Name"
@@ -71,7 +84,13 @@
 # .properties.buffer_pool_size.percent.buffer_pool_size_percent: 50
 
 
-.properties.optional_protections: "============================\n# Optional Protections\n# ============================\n# Choose (enabled  | disabled)\n# If you enable this option you must set Replication Canary Time period, Rep Canary read delay and email address\n"
+.properties.optional_protections: |
+  #============================
+  # Optional Protections
+  # ============================
+  # Choose (enabled  | disabled)
+  # If you enable this option you must set Replication Canary Time period, Rep Canary read delay and email address
+
 # .properties.optional_protections.enable.canary_poll_frequency: 30
 # .properties.optional_protections.enable.canary_write_read_delay: 20
 .properties.optional_protections.enable.notify_only: "- setting this is optional (true | false)"
