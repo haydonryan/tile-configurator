@@ -1,0 +1,51 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: source
+  type: git
+  source:
+    uri: https://github.com/haydonryan/tile-configurator
+    branch: master
+
+## Get the tile-configurator from here
+- name: github-release-repository
+  type: github-release
+  source: 
+    owner: haydonryan
+    repository: ((github_repository_name))
+    access_token: ((github_access_token))
+  
+resources:
+- name: p-mysql
+  type: pivnet
+  source:
+    api_token: ((pivnet-api-token))
+    product_slug: p-mysql
+
+
+jobs:
+- name: upload
+  plan:
+  - aggregate:
+    #- get: source
+    - get: pivnet-product
+      resource: p-mysql
+      params: {globs: ["*.pivotal"]}
+
+
+
+
+
+
+# get tile from pivnet
+
+# upload tile to ops manager
+
+# configure tile
+#tile-configurator/ci/pipelines/tasks/configure.sh
+
