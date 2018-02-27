@@ -19,7 +19,7 @@ params:
 
 inputs:
   - name: pivnet-product
-  - name: pcf-pipelines
+  - name: source
 
 run:
   path: pcf-pipelines/ci/pipelines/tasks/upload-product-and-stemcell.sh
