@@ -1,4 +1,4 @@
-package deploy
+package config
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-type Deploy struct {
+type Config struct {
 	Filename string `short:"i" long:"input" description:"Filename to apply to Ops manager" required:"true"`
 	URL      string `long:"url" description:"URL of the Ops manager" required:"true"`
 	Tile     string `short:"t" long:"tile" description:"filename to apply to Ops manager" required:"true"`
@@ -23,7 +23,7 @@ type Deploy struct {
 	OM       string `short:"o" long:"om" description:"Name of OM on this system" default:"om-linux"`
 }
 
-func (c *Deploy) Execute([]string) error {
+func (c *Config) Execute([]string) error {
 
 	// Open the properties file
 	//yaml, err := readYaml(string(c.Filename))
@@ -90,7 +90,7 @@ func makeJSON(v interface{}) string {
 }
 
 //each collection block can have multiple collections.
-func (c *Deploy) processAllCollection(m interface{}, url string, user string, password string, tile string) {
+func (c *Config) processAllCollection(m interface{}, url string, user string, password string, tile string) {
 	var groupSlice []interface{}
 	groupSlice, correct := m.([]interface{})
 
@@ -121,7 +121,7 @@ func (c *Deploy) processAllCollection(m interface{}, url string, user string, pa
 	}
 }
 
-func (c *Deploy) processGroup(m interface{}, url string, user string, password string, tile string) {
+func (c *Config) processGroup(m interface{}, url string, user string, password string, tile string) {
 	//Groups are defined as an array of maps.  Name is within the map
 	var groupSlice []interface{}
 	groupSlice, correct := m.([]interface{})
@@ -165,7 +165,7 @@ func processHash(m interface{}) {
 
 }
 
-func (c *Deploy) runCommand(url string, user string, password string, tile string, properties string) {
+func (c *Config) runCommand(url string, user string, password string, tile string, properties string) {
 	var output []byte
 
 	var args []string
