@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/haydonryan/tile-configurator/dictionary"
 	"github.com/haydonryan/tile-configurator/tileproperties"
@@ -164,6 +165,10 @@ func PrintYamlLine(key string, value interface{}, comment string) {
 		}
 		return
 	}
+	if comment[len(comment)-1] != '\n' {
+		comment = comment + string('\n')
+
+	}
 	if comment[0] == '-' { // if first char is '-' put comment after yaml
 		switch value.(type) {
 		case []interface{}:
@@ -172,7 +177,28 @@ func PrintYamlLine(key string, value interface{}, comment string) {
 			fmt.Println(string(b))
 			//fmt.Printf("MAP:%v: %v  #%v\n", key, value, comment)
 		default:
-			fmt.Printf("%v: %v  #%v\n", key, value, comment)
+			//fmt.Printf("%v: %v  \t\t\t#%v\n", key, value, comment)
+
+			tmp := fmt.Sprintf("%v: %v", key, value)
+			fmt.Printf("%-70v#%v", tmp, comment)
+		}
+
+	} else if comment[0] == '^' { // if first char is '-' put comment after yaml
+		switch value.(type) {
+		case []interface{}:
+
+			fmt.Printf("\n# %v\n%v:\n", comment, key)
+			b, _ := yaml.Marshal(value)
+			fmt.Println(string(b))
+			//fmt.Printf("MAP:%v: %v  #%v\n", key, value, comment)
+		default:
+			split := strings.Split(comment, "%v")
+			// check that it was actually split
+
+			fmt.Printf("# %v\n", strings.Trim(split[0], "^"))
+			tmp := fmt.Sprintf("%v: %v", key, value)
+			fmt.Printf("%-70v#%v", tmp, split[1])
+
 		}
 	} else {
 		switch value.(type) {
@@ -222,6 +248,7 @@ func OutputYaml(m map[string]interface{}, simple bool, annotate bool) {
 			// swap opsmgrKey for simplified key
 			PrintYamlLine(simpleKey, m[key], comment)
 		} else {
+
 			PrintYamlLine(key, m[key], comment)
 		}
 
