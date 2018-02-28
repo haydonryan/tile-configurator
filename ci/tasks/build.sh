@@ -16,8 +16,18 @@ go get github.com/Masterminds/glide
 # but there is no sourcecode 
 cd ${SOURCE_DIR} 
 
+# if Git cli is installed then get the version number from tags.
+if [ -d ".git" ]; then
+  DRAFT_VERSION=`versioning bump_patch`-`git rev-parse HEAD`
+else
+  DRAFT_VERSION="v0.0.0-local"
+fi
+echo "next version should be: ${DRAFT_VERSION}"
+
+
 # Glide install to get our dependencies
 glide install
+
 
 # Copy the source code to the gopath since go will expect it there.
 WORKING_DIR=$GOPATH/src/$GITHUB_URL
@@ -33,9 +43,5 @@ GOOS=linux GOARCH=amd64 go build -o ${OUTPUT_DIR}/${APP_NAME}-linux
 md5sum ${OUTPUT_DIR}/${APP_NAME}-linux | cut -f1 -d' ' > ${OUTPUT_DIR}/${APP_NAME}-linux-shasum
 
 # Put name and tag into files in the output directory
-# echo ${DRAFT_VERSION} > ${OUTPUT_DIR}/name
-# echo ${DRAFT_VERSION} > ${OUTPUT_DIR}/tag
-
-
-echo "testversionname" > ${OUTPUT_DIR}/name
-echo "testversiontag" > ${OUTPUT_DIR}/tag
+echo ${DRAFT_VERSION} > ${OUTPUT_DIR}/name
+echo ${DRAFT_VERSION} > ${OUTPUT_DIR}/tag
