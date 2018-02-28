@@ -31,8 +31,51 @@ Customer wants to manage entire tile configuration in JSON with pipelines and us
 
 ##### Install
 ###### Customer has sandbox and can generate JSON from Ops Managaer
-stage tile
-save properties
+Stage tile
+```
+$ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k staged-products
++---------+-----------------+
+|  NAME   |     VERSION     |
++---------+-----------------+
+| p-bosh  | 1.10.12.0       |
+| cf      | 1.10.20-build.6 |
+| p-mysql | 1.9.18          |
++---------+-----------------+
+
+
+
+```
+
+Save properties
+```
+
+# List all staged products 
+$ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k curl -p /api/v0/staged/products --silent
+[
+  {
+    "installation_name": "p-bosh",
+    "guid": "p-bosh-e264d97fa75e1646f473",
+    "type": "p-bosh",
+    "product_version": "1.10.12.0"
+  },
+  {
+    "installation_name": "cf-0fc76391fde7e5f1ad58",
+    "guid": "cf-0fc76391fde7e5f1ad58",
+    "type": "cf",
+    "product_version": "1.10.20-build.6"
+  },
+  {
+    "installation_name": "p-mysql-036173c998d92c2ce8ad",
+    "guid": "p-mysql-036173c998d92c2ce8ad",
+    "type": "p-mysql",
+    "product_version": "1.9.18"
+  }
+]
+
+# Use the product GUID to get the properties and redirect this into a file
+$ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k curl -p /api/v0/staged/products/p-mysql-036173c998d92c2ce8ad/properties --silent > mysql-properties.json
+
+```
 configure tile
 save properties
 (Note this doesn't work for X in ERT, keys, or secrets yet as the Ops Manger API won't return them)
@@ -52,3 +95,19 @@ Diff new tile to current tile to determine changes in json
 ##### Upgrade
 Diff new tile version to old to see what changes are needed (in yaml)
  With pipelines and using commandline
+
+
+
+- task: unpack-pivotal-file
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      inputs:
+      - name: pivnet-gemfire-release
+      run:
+        path: /bin/sh
+        args: ["-c", "find pivnet-gemfire-release/. -name '*.pivotal' | xargs -n1 unzip"]
+      outputs:
+      - name: releases
