@@ -6,26 +6,20 @@
 # Compliance  - i.e. Must be enabled for PCI compliance
 # links to documentation
 
-# keys will always be in alphabetical order
+# keys will always generate in alphabetical order
 
-# ".properties.syslog":              "Syslog Forwarding\n -----------------\n Choose either enabled or disbled"
-# ".properties.syslog.enabled.port": "The port for syslog"
-# ".properties.optional_protections":                                "If Disabled, you must set MySQL Monitor Node Instances to 0 in the \"Resource Config\" pane at left."
-# ".properties.optional_protections.enable.canary_poll_frequency":   "How frequently the canary checks for replication failure, in seconds. Lower numbers will cause the canary to run more frequently, adding load to the database."
-# ".properties.optional_protections.enable.canary_write_read_delay": "How long the canary waits to verify data is replicating across each MySQL node, in seconds. Clusters under heavily load will experience some small replication lag as writesets are committed across the nodes."
-# ".properties.optional_protections.enable.recipient_email":         "The MySQL service will send alerts when the cluster experiences a replication issue or a node is not allowed to auto-rejoin the cluster."
-".properties.syslog.enabled.port": "syslog port"
-
-# MySQL Properties:
+##################################################
+##################################################
 
 .cf-mysql-broker.bind_hostname: | 
-  ====================================
+  ^===================================
   # MySQL v1.9 GENERATED Parameters
-  # ====================================
+  # ===================================
 
-  # =================================
-  # MySQL Server Configuration\n
-  # =================================
+  # ===================================
+  # MySQL Server parameters
+  # ===================================
+  %v- hostname for mysql broker
 .cf-mysql-broker.quota_enforcer_pause: "- Configure how many seconds the Quota Enforcer pauses between polls. Advanced configuration, please read the documentation before modifying. (default 30)"
 # .mysql.allow_local_infile: true
 # .mysql.allow_remote_admin_access: false
@@ -45,39 +39,42 @@
 # .mysql.tmp_table_size: 33554432
 # .mysql.wsrep_debug: true
 
-.properties.backup_options: "==============\n# Enable Backups\n# ==============\n
-  # Choose (disable  | enable)\n# (Note: If you choose disable then you also need to set backup prepare node instances to 0 in resources.)"
+.properties.backup_options: |
+  ^===================================
+  # Enable Backups
+  # ===================================
+  # (Note: If you choose disable then you also need to set backup prepare node instances to 0 in resources)
+  %v- Choose (disable  | enable)
 .properties.backup_options.enable.backup_all_masters: "- Each node is a duplicate master. This option makes unique backups from each master, rather than from a single instance."
 .properties.backup_options.enable.cron_schedule: "- Cron Schedule (See http://godoc.org/github.com/robfig/cron)"
 
 .properties.backups: |
-  # ==============
+  ^==================================
   # Set Backup Destination
-  # ==============
-  # Choose (disable  | enable | azure | gcs | scp)
-  # (Note enable means enable s3)
+  # ===================================
+  # (Note enable means enable s3)%v- Choose (disable  | enable | azure | gcs | scp)
 .properties.backups.azure.base_url: "- URL of Azure BlobStore"
 .properties.backups.azure.container: "- Azure Container Name"
 .properties.backups.azure.container_path: "- Azure Container Name"
 .properties.backups.azure.storage_access_key: "- Azure Storage Access Key"
-.properties.backups.azure.storage_account: "- Azure Storage Account Name\n"
+.properties.backups.azure.storage_account: "- Azure Storage Account Name\n\n"
 .properties.backups.enable.access_key_id: "- S3 Access Key"
 .properties.backups.enable.bucket_name: "- Bucket Name"
 .properties.backups.enable.bucket_path: "- Bucket Path"
 .properties.backups.enable.endpoint_url: "- S3 Endpoint "
 .properties.backups.enable.region: "- S3 region (If using AWS S3, this field is required for any non us-east-1 regions)"
-.properties.backups.enable.secret_access_key: "- S3 secret key\n"
+.properties.backups.enable.secret_access_key: "- S3 secret key\n\n"
 
 .properties.backups.gcs.bucket_name: "- GCS bucket name"
 .properties.backups.gcs.project_id: "- GCS project ID"
-.properties.backups.gcs.service_account_json: "- Service account must have Storage Admin IAM permissions. See documentation for how to generate the JSON key."
+.properties.backups.gcs.service_account_json: "- Service account must have Storage Admin IAM permissions. See documentation for how to generate the JSON key.\n\n"
 
 
 .properties.backups.scp.destination: "- Destination directory"
 .properties.backups.scp.port: "- SCP Port"
 .properties.backups.scp.scp_key: "- Private SSH Key for access (Do not password protect)"
 .properties.backups.scp.server: "- Hostname / IP Address"
-.properties.backups.scp.user: "- Username"
+.properties.backups.scp.user: "- Username\n\n"
 
 # .properties.buffer_pool_size: percent
 # .properties.buffer_pool_size.bytes.buffer_pool_size_bytes: 0
@@ -85,11 +82,10 @@
 
 
 .properties.optional_protections: |
-  #============================
+  ^============================
   # Optional Protections
   # ============================
-  # Choose (enabled  | disabled)
-  # If you enable this option you must set Replication Canary Time period, Rep Canary read delay and email address
+  # If you enable this option you must set Replication Canary Time period, Rep Canary read delay and email address%vChoose (enabled  | disabled)
 
 # .properties.optional_protections.enable.canary_poll_frequency: 30
 # .properties.optional_protections.enable.canary_write_read_delay: 20
@@ -101,7 +97,7 @@
 
 .properties.plan_collection: "============================\n# MySQL Plans \n# ============================\n"
 
-#.properties.server_activity_logging: enable
+.properties.server_activity_logging: "============================\n# Server Activity Logging \n# ============================\n"
 #.properties.server_activity_logging.enable.audit_logging_events: connect,query
 # .properties.server_activity_logging.enable.server_audit_excluded_users_csv: <nil>
 
