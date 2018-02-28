@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/haydonryan/tile-configurator/dictionary"
 	"github.com/haydonryan/tile-configurator/tileproperties"
 	"github.com/xchapter7x/lo"
 )
@@ -29,7 +30,8 @@ func (c *Config) Execute([]string) error {
 	//yaml, err := readYaml(string(c.Filename))
 
 	tile := tileproperties.NewTileProperties()
-
+	dict := dictionary.NewDictionary()
+	err := dict.LoadDictionary("dictionary.yml")
 	yaml, err := tile.ReadYAML(c.Filename)
 	if err != nil {
 		fmt.Println(err)
@@ -45,9 +47,18 @@ func (c *Config) Execute([]string) error {
 		username = string(c.Username)
 		password = string(c.Password)
 	}
+	// Search through help map to convert simple param names to proper ops mgr ones.
+	for key, _ := range yaml {
+		if dict.ReverseLookup[key] != "" {
+			fmt.Printf("Converting %v to %v\n", key, dict.ReverseLookup[key])
+			yaml[dict.ReverseLookup[key]] = yaml[key]
+			delete(yaml, key)
+		}
+	}
 
 	// Parse through the map and process keys as either individual, collections and groups
 	for key, value := range yaml {
+
 		if key == "collections" {
 			lo.G.Debug("Found collections")
 			c.processAllCollection(value, string(c.URL), username, password, string(c.Tile))
