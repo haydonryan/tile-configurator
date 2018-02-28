@@ -6,40 +6,145 @@ resource_types:
     tag: latest-final
 
 resources:
+- name: state
+  type: git
+  source:
+    uri: git@bitbucket.org:Haydonryan/homelab-bosh-state.git
+    branch: master
+    private_key: ((git-private-key))
+
 - name: source
   type: git
   source:
     uri: https://github.com/haydonryan/tile-configurator
     branch: master
 
-## Get the tile-configurator from here
-- name: github-release-repository
+# Get the tile-configurator from here
+- name: tile-configurator
   type: github-release
   source: 
     owner: haydonryan
     repository: ((github_repository_name))
     access_token: ((github_access_token))
   
-resources:
+
 - name: p-mysql
   type: pivnet
   source:
     api_token: ((pivnet-api-token))
-    product_slug: p-mysql
+    product_slug: ((product-name))
+    product_version: ((tile-version))
 
 
 jobs:
 - name: upload
   plan:
   - aggregate:
-    #- get: source
+    - get: source
     - get: pivnet-product
-      resource: p-mysql
+      resource: ((product-name))
       params: {globs: ["*.pivotal"]}
+  - task: upload-tile
+    file: source/ci/pipelines/tasks/upload-product-and-stemcell.yml
+    params:
+      IAAS: "vsphere"
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      PIVNET_API_TOKEN: {{pivnet_token}}
+      OM_IP: {{om_ip}}
+
+- name: stage
+  plan:
+  - get: source
+    trigger: true
+    passed: [upload]
+  - get: state
+  - get: tile-configurator
+  - task: fetch-binary
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: { repository: czero/cflinuxfs2 }
+      inputs:
+      - name: state
+      - name: source
+      - name: tile-configurator
+        #outputs:
+        #- name: nexus-artifact-shasum
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -e
+          set -x
+          om-linux --target "https://((opsman_domain_or_ip_address))" \
+          --skip-ssl-validation \
+          --username "((opsman_admin_username))" \
+          --password "((opsman_admin_password))" \
+          stage-product \
+          --product-name "((product-name))" \
+          --product-version "((tile-version))"
 
 
+- name: configure
+  plan:
+  - get: source
+    trigger: true
+    passed: [stage]
+  - get: state
+    trigger: true
+  - get: tile-configurator
+  - task: set-network
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: { repository: czero/cflinuxfs2 }
+      inputs:
+      - name: state
+      - name: source
+      - name: tile-configurator
+        #outputs:
+        #- name: nexus-artifact-shasum
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -e
+          set -x
+          echo Setting Network the old way as we do not support setting this... yet.....
+          om-linux -k -u ((opsman_admin_username)) -p ((opsman_admin_password)) -t ((opsman_domain_or_ip_address)) configure-product --product-name ((product-name)) -pn '{"network":{"name":"DEPLOYMENT"},"other_availability_zones":[{"name":"PCF Cluster"}],"singleton_availability_zone":{"name":"PCF Cluster"}}'
 
-
+  - task: configure-product
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: { repository: czero/cflinuxfs2 }
+      inputs:
+      - name: state
+      - name: source
+      - name: tile-configurator
+        #outputs:
+        #- name: nexus-artifact-shasum
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -e
+          set -x
+          cp source/help.yml .                                  # these need to be in the current directory -
+          cp source/dictionary.yml .                            # to assist with convertinggit 
+          chmod +x tile-configurator/tile-configurator-linux    # make this executable
+          #tile-configurator/tile-configurator-linux --help
+          tile-configurator/tile-configurator-linux config --url=((opsman_domain_or_ip_address)) -u ((opsman_admin_username)) -p ((opsman_admin_password)) -i state/mysql.yml -t ((product-name))
 
 
 # get tile from pivnet
@@ -47,5 +152,4 @@ jobs:
 # upload tile to ops manager
 
 # configure tile
-#tile-configurator/ci/pipelines/tasks/configure.sh
 
