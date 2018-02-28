@@ -169,6 +169,19 @@ func PrintYamlLine(key string, value interface{}, comment string) {
 		comment = comment + string('\n')
 
 	}
+
+	// Strip nil and *** from output
+	v, correct := value.(string)
+	if correct {
+
+		if v == "***" {
+			value = ""
+		}
+	}
+	if value == nil {
+		value = ""
+	}
+
 	if comment[0] == '-' { // if first char is '-' put comment after yaml
 		switch value.(type) {
 		case []interface{}:
