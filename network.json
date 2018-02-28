@@ -1,0 +1,11 @@
+{
+  "network": {
+    "name": "DEPLOYMENT"
+  },
+  "other_availability_zones": [{
+    "name": "PCF Cluster"
+  }],
+  "singleton_availability_zone": {
+    "name": "PCF Cluster"
+  }
+}
