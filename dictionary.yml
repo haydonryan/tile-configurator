@@ -33,10 +33,10 @@
 # .mysql.table_open_cache: 2000
 # .mysql.tmp_table_size: 33554432
 # .mysql.wsrep_debug: true
-# .properties.backup_options: disable
-# .properties.backup_options.enable.backup_all_masters: true
-# .properties.backup_options.enable.cron_schedule: <nil>
-.properties.backups: backups
+.properties.backup_options: backup
+.properties.backup_options.enable.backup_all_masters: backup_masters
+.properties.backup_options.enable.cron_schedule: backup_cron_schedule
+.properties.backups: export_backups
 
 .properties.backups.azure.base_url: azure_backup_base_url
 .properties.backups.azure.container: azure_backup_container
@@ -47,39 +47,42 @@
 .properties.backups.enable.access_key_id: s3_backup_access_key
 .properties.backups.enable.bucket_name: s3_backup_bucket_name
 .properties.backups.enable.bucket_path: s3_backup_bucket_path
-# .properties.backups.enable.endpoint_url: <nil>
-# .properties.backups.enable.region: <nil>
-# #.properties.backups.enable.secret_access_key: ***
 
-# .properties.backups.gcs.bucket_name: <nil>
-# .properties.backups.gcs.project_id: <nil>
-# #.properties.backups.gcs.service_account_json: ***
+.properties.backups.enable.endpoint_url: s3_backup_endpoint
+.properties.backups.enable.region: s3_backup_region
+.properties.backups.enable.secret_access_key: s3_backup_access_key
 
-# .properties.backups.scp.destination: <nil>
-# .properties.backups.scp.port: 22
-# .properties.backups.scp.scp_key: <nil>
-# .properties.backups.scp.server: <nil>
-# .properties.backups.scp.user: <nil>
+.properties.backups.gcs.bucket_name: gcs_backup_bucket
+.properties.backups.gcs.project_id: gcs_backup_project_id
+.properties.backups.gcs.service_account_json: gcs_backup_account_json
+
+.properties.backups.scp.destination: scp_backup_directory
+.properties.backups.scp.port: scp_backup_port
+.properties.backups.scp.scp_key: scp_backup_key
+.properties.backups.scp.server: scp_backup_server
+.properties.backups.scp.user: scp_backup_user
 
 # .properties.buffer_pool_size: percent
 # .properties.buffer_pool_size.bytes.buffer_pool_size_bytes: 0
 # .properties.buffer_pool_size.percent.buffer_pool_size_percent: 50
-# .properties.optional_protections: enable
-# .properties.optional_protections.enable.canary_poll_frequency: 30
-# .properties.optional_protections.enable.canary_write_read_delay: 20
-# .properties.optional_protections.enable.notify_only: false
-# .properties.optional_protections.enable.prevent_auto_rejoin: false
-# .properties.optional_protections.enable.recipient_email: <nil>
-# .properties.optional_protections.enable.replication_canary: true
-# .properties.plan_collection: plan_collection
-# .properties.server_activity_logging: enable
-# .properties.server_activity_logging.enable.audit_logging_events: connect,query
-# .properties.server_activity_logging.enable.server_audit_excluded_users_csv: <nil>
-.properties.syslog: "syslog"
-# .properties.syslog.enabled.address: <nil>
-# .properties.syslog.enabled.port: 6514
-# .proxy.shutdown_delay: 0
-# .proxy.startup_delay: 0
+
+.properties.optional_protections: optional_protections
+.properties.optional_protections.enable.canary_poll_frequency: optional_protections_canary_poll
+.properties.optional_protections.enable.canary_write_read_delay: optional_protections_canary_rw_delay
+.properties.optional_protections.enable.notify_only: optional_protections_notify_only
+.properties.optional_protections.enable.prevent_auto_rejoin: optional_protections_prevent_auto_rejoin
+.properties.optional_protections.enable.recipient_email: optional_protections_recipient_email
+.properties.optional_protections.enable.replication_canary: optional_protections_replication_canary
+
+.properties.plan_collection: plan_collection
+.properties.server_activity_logging: server_activity_logging
+.properties.server_activity_logging.enable.audit_logging_events: server_activity_logging_events
+.properties.server_activity_logging.enable.server_audit_excluded_users_csv: server_activity_excluded_users
+.properties.syslog: syslog_forwarder
+.properties.syslog.enabled.address: syslog_forwarder_address
+.properties.syslog.enabled.port: syslog_forwarder_port
+.proxy.shutdown_delay: proxy_shutdown_delay
+.proxy.startup_delay: proxy_startup_delay
 .proxy.static_ips: proxy_static_ips
 
 
