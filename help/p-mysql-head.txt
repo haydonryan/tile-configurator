@@ -1,0 +1,36 @@
+# ===================================================
+# MySQL GENERATED Parameters
+# ===================================================
+# You can use this file as a base deploying MySQL V1.
+#
+# Internal Slack Channel:
+# PM:
+#
+# Instructions for using this file.
+#
+# Links to Pivotal Docs for Configuring these options:
+#  https://docs.pivotal.io/p-mysql/2-2/install-config.html#config-on-demand
+# 
+# USAGE:
+# ------
+#   tile-configurator config -i 
+#   ./tile-configurator config --help
+#   Usage:
+#     tile-configurator [OPTIONS] config [config-OPTIONS]
+#   
+#   Application Options:
+#     -v, --verbose       Show verbose debug info
+#   
+#   Help Options:
+#     -h, --help          Show this help message
+#   
+#   [config command options]
+#         -i, --input=    Filename to apply to Ops manager
+#             --url=      URL of the Ops manager
+#         -t, --tile=     filename to apply to Ops manager
+#         -u, --user=     Username for logging into Ops Manager.
+#         -k, --key=      key for logging into Ops Manager
+#         -p, --password= Password for logging into Ops Manager
+#         -s, --secret=   Secret for logging into Ops Manager
+#         -o, --om=       Name of OM on this system (default: om-linux)
+# ===================================================
