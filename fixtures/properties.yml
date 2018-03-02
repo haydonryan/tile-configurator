@@ -1,4 +1,5 @@
 # Comment
+syslog: disabled
 
 .properties.optional_protections.enable.canary_poll_frequency: 69
 # .properties.optional_protections.enable.canary3_poll_frequency: 69
@@ -14,9 +15,9 @@ groups:
   .properties.backup_options: "enable"
   .properties.backup_options.enable.cron_schedule: "0 30 30 30 30 30 30"
 
-- name: somethignelse
-  .properties.backup_options: "enable"
-  .properties.backup_options.enable.cron_schedule: "0 30 30 30 30 30 30"
+# - name: somethignelse
+#   .properties.backup_options: "enable"
+#   .properties.backup_options.enable.cron_schedule: "0 30 30 30 30 30 30"
 
 
 collections:
@@ -31,14 +32,14 @@ collections:
     max_storage_mb:  400
     max_user_connections: 40
     private: false
-- .properties.evil:
-  - name: "evil 100mb"
-    description:  "evil 100MB default"
-    max_storage_mb:  100
-    max_user_connections: 40
-    private: false
-  - name: "evil 400mb"
-    description:  "evil 400MB default"
-    max_storage_mb:  400
-    max_user_connections: 40
-    private: false
+# - .properties.evil:
+#   - name: "evil 100mb"
+#     description:  "evil 100MB default"
+#     max_storage_mb:  100
+#     max_user_connections: 40
+#     private: false
+#   - name: "evil 400mb"
+#     description:  "evil 400MB default"
+#     max_storage_mb:  400
+#     max_user_connections: 40
+#     private: false
