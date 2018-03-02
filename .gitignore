@@ -7,3 +7,14 @@ bin/
 tile-configurator
 debug
 ci/params.yml
+fixtures/homelab/
+
+
+# ignore lazy scripts for testing
+ci/set-pipeline.sh
+output.yml
+setNetworkFromJson.sh
+
+# exclude potentially sensitive information
+params*.yml
+*.key
