@@ -1,0 +1,405 @@
+{
+    "properties": {
+      ".properties.metrics_polling_interval": {
+        "type": "integer",
+        "configurable": true,
+        "credential": false,
+        "value": 30,
+        "optional": false
+      },
+      ".properties.syslog_selector": {
+        "type": "selector",
+        "configurable": true,
+        "credential": false,
+        "value": "enabled",
+        "optional": false
+      },
+      ".properties.syslog_selector.enabled.address": {
+        "type": "network_address",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": false
+      },
+      ".properties.syslog_selector.enabled.port": {
+        "type": "port",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": false
+      },
+      ".properties.broker_basic_auth": {
+        "type": "simple_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "password": "***"
+        },
+        "optional": false
+      },
+      ".properties.disk_alarm_threshold": {
+        "type": "selector",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": false
+      },
+      ".properties.metron_tls_cert": {
+        "type": "rsa_cert_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "private_key_pem": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-server.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-server.server_admin_credentials": {
+        "type": "simple_credentials",
+        "configurable": true,
+        "credential": true,
+        "value": {
+          "password": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-server.service_broker_rabbitmq_admin_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "broker",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-server.plugins": {
+        "type": "multi_select_options",
+        "configurable": true,
+        "credential": false,
+        "value": [
+          "rabbitmq_management"
+        ],
+        "optional": false
+      },
+      ".rabbitmq-server.rsa_certificate": {
+        "type": "rsa_cert_credentials",
+        "configurable": true,
+        "credential": true,
+        "value": {
+          "private_key_pem": "***"
+        },
+        "optional": true
+      },
+      ".rabbitmq-server.ssl_cacert": {
+        "type": "ca_certificate",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".rabbitmq-server.ssl_verify": {
+        "type": "boolean",
+        "configurable": true,
+        "credential": false,
+        "value": false,
+        "optional": true
+      },
+      ".rabbitmq-server.ssl_verification_depth": {
+        "type": "integer",
+        "configurable": true,
+        "credential": false,
+        "value": 5,
+        "optional": false
+      },
+      ".rabbitmq-server.ssl_fail_if_no_peer_cert": {
+        "type": "boolean",
+        "configurable": true,
+        "credential": false,
+        "value": false,
+        "optional": true
+      },
+      ".rabbitmq-server.cookie": {
+        "type": "string",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".rabbitmq-server.config": {
+        "type": "text",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".rabbitmq-server.ssl_versions": {
+        "type": "multi_select_options",
+        "configurable": true,
+        "credential": false,
+        "value": [
+          "tlsv1.1",
+          "tlsv1.2"
+        ],
+        "optional": false
+      },
+      ".rabbitmq-server.cluster_partition_handling": {
+        "type": "dropdown_select",
+        "configurable": true,
+        "credential": false,
+        "value": "pause_minority",
+        "optional": false,
+        "options": [
+          {
+            "label": "pause_minority",
+            "value": "pause_minority"
+          },
+          {
+            "label": "autoheal",
+            "value": "autoheal"
+          }
+        ]
+      },
+      ".rabbitmq-server.ports": {
+        "type": "string",
+        "configurable": true,
+        "credential": false,
+        "value": "15672, 5672, 5671, 1883, 8883, 61613, 61614, 15674",
+        "optional": false
+      },
+      ".rabbitmq-server.static_ips": {
+        "type": "ip_ranges",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".rabbitmq-haproxy.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-haproxy.static_ips": {
+        "type": "ip_ranges",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".rabbitmq-broker.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-broker.broker_http_auth_credentials": {
+        "type": "simple_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "admin",
+          "password": "***"
+        },
+        "optional": false
+      },
+      ".rabbitmq-broker.dns_host": {
+        "type": "string",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".rabbitmq-broker.operator_set_policy_enabled": {
+        "type": "boolean",
+        "configurable": true,
+        "credential": false,
+        "value": false,
+        "optional": false
+      },
+      ".rabbitmq-broker.policy_definition": {
+        "type": "text",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".broker-registrar.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".broker-deregistrar.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".smoke-tests.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".smoke-tests.smoke_test_user_password": {
+        "type": "secret",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "secret": "***"
+        },
+        "optional": false
+      },
+      ".on-demand-broker.enable_single_node_plan": {
+        "type": "boolean",
+        "configurable": true,
+        "credential": false,
+        "value": false,
+        "optional": true
+      },
+      ".on-demand-broker.plan_name": {
+        "type": "string",
+        "configurable": true,
+        "credential": false,
+        "value": "solo",
+        "optional": false
+      },
+      ".on-demand-broker.plan_description": {
+        "type": "string",
+        "configurable": true,
+        "credential": false,
+        "value": "Single node RabbitMQ dedicated instance",
+        "optional": false
+      },
+      ".on-demand-broker.plan_features": {
+        "type": "string",
+        "configurable": true,
+        "credential": false,
+        "value": "RabbitMQ",
+        "optional": false
+      },
+      ".on-demand-broker.solo_plan_instance_quota": {
+        "type": "integer",
+        "configurable": true,
+        "credential": false,
+        "value": 0,
+        "optional": false
+      },
+      ".on-demand-broker.global_service_instance_quota": {
+        "type": "integer",
+        "configurable": true,
+        "credential": false,
+        "value": 20,
+        "optional": false
+      },
+      ".on-demand-broker.persistent_disk_type": {
+        "type": "disk_type_dropdown",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": false
+      },
+      ".on-demand-broker.az_placement": {
+        "type": "service_network_az_multi_select",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": false
+      },
+      ".on-demand-broker.rmq_vm_type": {
+        "type": "vm_type_dropdown",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": false
+      },
+      ".on-demand-broker.vm_extensions": {
+        "type": "multi_select_options",
+        "configurable": true,
+        "credential": false,
+        "value": null,
+        "optional": true
+      },
+      ".register_on_demand_service_broker.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".deregister_on_demand_service_broker.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".delete-all-service-instances.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      },
+      ".upgrade-all-service-instances.vm_credentials": {
+        "type": "salted_credentials",
+        "configurable": false,
+        "credential": true,
+        "value": {
+          "identity": "vcap",
+          "password": "***",
+          "salt": "***"
+        },
+        "optional": false
+      }
+    }
+  }
