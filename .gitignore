@@ -18,3 +18,4 @@ setNetworkFromJson.sh
 # exclude potentially sensitive information
 params*.yml
 *.key
+help.yml
