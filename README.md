@@ -34,11 +34,9 @@ Starting with an automated deploy of PCF allows the solutions team to biuld conf
 
 However the end goal is the same - automated PCF deploys.
 
-#### JSON Track (advanced customers):
-Customer wants to manage entire tile configuration in JSON with pipelines and using commandline
 
-##### Install
-###### Customer has sandbox and can generate JSON from Ops Managaer
+### Customer has sandbox deployed and can generate JSON from Ops Managaer
+
 Stage tile
 ```
 $ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k staged-products
@@ -49,9 +47,6 @@ $ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k staged-products
 | cf      | 1.10.20-build.6 |
 | p-mysql | 1.9.18          |
 +---------+-----------------+
-
-
-
 ```
 
 Save properties
@@ -84,38 +79,136 @@ $ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k curl -p /api/v0/staged/produc
 $ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k curl -p /api/v0/staged/products/p-mysql-036173c998d92c2ce8ad/properties --silent > mysql-properties.json
 
 ```
-configure tile
-save properties
-(Note this doesn't work for X in ERT, keys, or secrets yet as the Ops Manger API won't return them)
-###### Customer wants to start from JSON template / schema
 
-##### Upgrade
-Diff new tile to current tile to determine changes in json
+Now that we have the properties in a json file we can ingest it to a yaml with comments.  
+
+  
+
+```
+# The -a annotates the yaml with comments generated (currently) from help.yml. 
+# The -s simplifies the keys used by doing a dictionary lookup.
+
+$ ./tile-configurator ingest -i ~/workspace/dojostarter/tiles/p-mysql-1.10.12.json -s -a > output.yml
+
+```
+
+The contents of the output.yml will look something like this:
+```
+# ===================================
+# MySQL v1.9 GENERATED Parameters
+# ===================================
+
+# ===================================
+# MySQL Server parameters
+# ===================================
+
+.cf-mysql-broker.bind_hostname:                                       #- hostname for mysql broker
+.cf-mysql-broker.quota_enforcer_pause: 30                             #- Configure how many seconds the Quota Enforcer pauses between polls. Advanced configuration, please read the documentation before modifying. (default 30)
+.mysql.allow_local_infile: true
+.mysql.allow_remote_admin_access: false
+.mysql.binlog_expire_days: 7
+.mysql.cli_history: true
+.mysql.cluster_name: cf-mariadb-galera-cluster                        #- Cluster name of the MySQL cluster - do not change when upgrading!
+.mysql.cluster_probe_timeout: 10
+.mysql.innodb_large_prefix_enabled: true
+.mysql.innodb_strict_mode: true
+.mysql.max_connections: 1500
+.mysql.metrics_polling_frequency: 30                                  #- Select the polling interval for MySQL metrics in seconds
+.mysql.mysql_start_timeout: 60
+.mysql.roadmin_password: ***
+.mysql.skip_name_resolve: true
+.mysql.table_definition_cache: 8192
+.mysql.table_open_cache: 2000
+.mysql.tmp_table_size: 33554432
+# ===================================
+# Enable Backups
+# ===================================
+# (Note: If you choose disable then you also need to set backup prepare node instances to 0 in resources)
+
+backup: disable                                                       #- Choose (disable  | enable)
+backup_masters: true                                                  #- Each node is a duplicate master. This option makes unique backups from each master, rather than from a single instance.
+backup_cron_schedule:                                                 #- Cron Schedule (See http://godoc.org/github.com/robfig/cron)
+# ==================================
+# Set Backup Destination
+# ===================================
+# (Note enable means enable s3)
+export_backups: disable                                               #- Choose (disable  | enable | azure | gcs | scp)
+azure_backup_base_url:                                                #- URL of Azure BlobStore
+azure_backup_container:                                               #- Azure Container Name
+azure_backup_stir:                                                    #- Azure Container Name
+azure_backup_storage_account_key:                                     #- Azure Storage Access Key
+azure_backup_storage_account_name:                                    #- Azure Storage Account Name
+
+s3_backup_access_key:                                                 #- S3 Access Key
+s3_backup_bucket_name:                                                #- Bucket Name
+s3_backup_bucket_path:                                                #- Bucket Path
+s3_backup_endpoint:                                                   #- S3 Endpoint 
+s3_backup_region:                                                     #- S3 region (If using AWS S3, this field is required for any non us-east-1 regions)
+s3_backup_access_key:                                                 #- S3 secret key
+```
+
+
+### Comparing configurations
+There are many scenarios that you want to work out what has changed between configurations. This may include things like:
+- Diff of what has been configured from a staged tile
+- Diff between two environments ie sandbox and development
+- Diff between what's in source control and has been configured in Ops Manager
+- Diff between what version N of the tile contains, and N+1
+
+Tile Configurator includes a diff feature.  It will report the keys that have been added to a tile. Note that to find out the properties that have been removed, you just swap the parameters.  This was done so that the outputs could be captured and annotated with comments.
+
+```
+$ ./tile-configurator diff -b fixtures/p-mysql-1.9.10-unconfigured.json -c fixtures/p-mysql-1.9.18-unconfigured.json  |jq
+{
+  "properties": {
+    ".cf-mysql-broker.allow_table_locks": {
+      "configurable": true,
+      "credential": false,
+      "optional": false,
+      "type": "boolean",
+      "value": true
+    },
+    ".mysql.mysql_backup_server_certificate": {
+      "configurable": false,
+      "credential": true,
+      "optional": false,
+      "type": "rsa_cert_credentials",
+      "value": {
+        "private_key_pem": "***"
+      }
+    },
+    ".properties.innodb_flush_log_at_trx_commit": {
+      "configurable": true,
+      "credential": false,
+      "optional": false,
+      "type": "selector",
+      "value": "two"
+    },
+    ".properties.syslog.enabled.protocol": {
+      "configurable": true,
+      "credential": false,
+      "optional": true,
+      "options": [
+        {
+          "label": "TCP protocol",
+          "value": "tcp"
+        },
+        {
+          "label": "UDP protocol",
+          "value": "udp"
+        },
+        {
+          "label": "RELP protocol",
+          "value": "relp"
+        }
+      ],
+      "type": "dropdown_select",
+      "value": "tcp"
+    }
+  }
+}
+
+```
 
 
 
-#### YAML Track (easier):
- Customer wants to simplify to yaml
-##### Install
-###### Customer has sandbox and can generate JSON
-###### Customer wants to start from YAML template
-
-##### Upgrade
-Diff new tile version to old to see what changes are needed (in yaml)
- With pipelines and using commandline
-
-
-
-- task: unpack-pivotal-file
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source: {repository: busybox}
-      inputs:
-      - name: pivnet-gemfire-release
-      run:
-        path: /bin/sh
-        args: ["-c", "find pivnet-gemfire-release/. -name '*.pivotal' | xargs -n1 unzip"]
-      outputs:
-      - name: releases
