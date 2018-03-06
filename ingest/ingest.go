@@ -1,4 +1,4 @@
-package injest
+package ingest
 
 import (
 	"errors"
@@ -13,22 +13,22 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-/// Injest required for go-flags
-type Injest struct {
-	InputFile string `short:"i" long:"injest" description:"Filename to be injested" required:"true"`
+/// Ingest required for go-flags
+type Ingest struct {
+	InputFile string `short:"i" long:"ingest" description:"Filename to be ingested" required:"true"`
 	Simple    bool   `short:"s" long:"simple" description:"Simplify Keys"`
 	Annotate  bool   `short:"a" long:"annotate" description:"Annotate output with help"`
 }
 
 /// go-flags callhack entry point
-func (c *Injest) Execute([]string) error {
+func (c *Ingest) Execute([]string) error {
 
 	tile := tileproperties.NewTileProperties()
 
 	base, _ := tile.ReadJSON(c.InputFile)
 
 	//base, _ := ReadJSON(c.InputFile)
-	result, _ := ProcessInjest(base)
+	result, _ := ProcessIngest(base)
 
 	OutputYaml(result, c.Simple, c.Annotate)
 
@@ -88,7 +88,7 @@ func CreateCollections(m interface{}) ([]interface{}, error) {
 
 }
 
-func ProcessInjest(m interface{}) (map[string]interface{}, error) {
+func ProcessIngest(m interface{}) (map[string]interface{}, error) {
 	result := make(map[string]interface{})
 	source, correct := m.(map[string]interface{})
 	if correct {

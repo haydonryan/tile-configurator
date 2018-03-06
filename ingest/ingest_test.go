@@ -1,9 +1,9 @@
-package injest_test
+package ingest_test
 
 import (
 	"testing"
 
-	. "github.com/haydonryan/tile-configurator/injest"
+	. "github.com/haydonryan/tile-configurator/ingest"
 	"github.com/haydonryan/tile-configurator/tileproperties"
 	"github.com/xchapter7x/lo"
 
@@ -11,12 +11,12 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Injest", func() {
+var _ = Describe("Ingest", func() {
 	Context("JSON", func() {
 		It("should return nil if an empty map is passed to it and return an error", func() {
 
 			input := make(map[string]interface{})
-			result, err := ProcessInjest(input)
+			result, err := ProcessIngest(input)
 
 			Expect(err).NotTo(BeNil())
 			Expect(result).To(BeNil())
@@ -30,7 +30,7 @@ var _ = Describe("Injest", func() {
 			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
-			result, err := ProcessInjest(input)
+			result, err := ProcessIngest(input)
 			Expect(err).To(BeNil())
 			lo.G.Debug(result)
 			//expect properties to not exist
@@ -43,7 +43,7 @@ var _ = Describe("Injest", func() {
 			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
-			result, err := ProcessInjest(input)
+			result, err := ProcessIngest(input)
 			Expect(err).To(BeNil())
 			Expect(result[".properties.backup_options"]).To(Equal("enable"))
 		})
@@ -54,7 +54,7 @@ var _ = Describe("Injest", func() {
 			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
-			result, err := ProcessInjest(input)
+			result, err := ProcessIngest(input)
 			Expect(err).To(BeNil())
 			Expect(result[".properties.backup_value"]).To(BeNil())
 		})
@@ -65,7 +65,7 @@ var _ = Describe("Injest", func() {
 			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
-			result, err := ProcessInjest(input)
+			result, err := ProcessIngest(input)
 			Expect(err).To(BeNil())
 			Expect(result[".properties.backups.scp.port"]).To(Equal(int(22)))
 
@@ -76,7 +76,7 @@ var _ = Describe("Injest", func() {
 			input, err := tile.ReadJSON(filename)
 			Expect(err).To(BeNil())
 
-			result, err := ProcessInjest(input)
+			result, err := ProcessIngest(input)
 			Expect(err).To(BeNil())
 			Expect(result[".properties.backup_options.enable.cron_schedule"]).To(Equal(string("stringvalue")))
 
@@ -89,7 +89,7 @@ var _ = Describe("Injest", func() {
 				input, err := tile.ReadJSON(filename)
 				Expect(err).To(BeNil())
 
-				result, err := ProcessInjest(input)
+				result, err := ProcessIngest(input)
 				lo.G.Debug(result)
 				Expect(err).To(BeNil())
 
@@ -104,7 +104,7 @@ var _ = Describe("Injest", func() {
 				input, err := tile.ReadJSON(filename)
 				Expect(err).To(BeNil())
 
-				result, err := ProcessInjest(input)
+				result, err := ProcessIngest(input)
 				lo.G.Debug(result)
 				Expect(err).To(BeNil())
 				Expect(result[".properties.buffer_pool_size.bytes.buffer_pool_size_bytes"]).To(Equal(0))
