@@ -15,9 +15,8 @@ If you have an issue with this tool - please submit a github issue.  I'm using P
 
 ### To Do
 - Injest:
-  - Make an injestor to create starting templates from the API
-  - Add diff to fresh staged properties to allow creation of a template that is only "what's changed"
-  - Externalise property name lookup help.
+  - Read tile metadata into tool to provide help.
+  - Externalise property name lookup dictionary.
 - Configure:
   - Add flag to apply everything in one hit rather than individually (faster but less feedback for errors)
   - Add output to json 
@@ -25,6 +24,15 @@ If you have an issue with this tool - please submit a github issue.  I'm using P
 
 
 ### Workflows:
+Tile-configurator has been built to support the two main workflows that we see customers want to do.  
+
+#### Starting with a manual install of PCF.
+By doing a manual install at the start it allows inexperienced cloud operators understand the process of configuring Pivotal Cloud Foundry and it's components. 
+
+#### Starting with an automated deployment of PCF.
+Starting with an automated deploy of PCF allows the solutions team to biuld configuration applicable to the customer before going on site.  It also allows temporary labs to be created and full Infrastructure as Code.
+
+However the end goal is the same - automated PCF deploys.
 
 #### JSON Track (advanced customers):
 Customer wants to manage entire tile configuration in JSON with pipelines and using commandline
