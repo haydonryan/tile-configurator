@@ -255,5 +255,5 @@ X-Xss-Protection: 1; mode=block
 0
 
 ```
-
+IMPORTANT: Currently the configuration step supports individual properties, groups (that are specifically defined), and collections. All other properties (ie hashed properties are unsupported)  Features are planned so that we can do automated groups / shared properties together without needing special formatting.
 
