@@ -210,5 +210,50 @@ $ ./tile-configurator diff -b fixtures/p-mysql-1.9.10-unconfigured.json -c fixtu
 
 ```
 
+This file can then be injested back into yaml to have comments and easy to read keys as above.
+
+
+### Applying configuration to Ops Manager
+
+The final function of this tool is to provide good feedback when applying configurationt to Ops Manager.  
+
+The goals for this component:
+ - Configuration applied one parameter at a time or in groups where required.
+ - Hide details when things go right - ie applying properties.
+ - Provide clear communication to the worker when things to wrong
+ - Support running in a pipeline / command line for fast feedback and therefore iterations.
+
+Example showing error when applying a group of properties:
+ ```
+ $ ./tile-configurator config -i fixtures/properties.yml -t p-mysql -u <<REDACTED>> -p <<REDACTED>> --url opsmgr.sandbox.lab.hnrglobal.com
+Converting syslog_forwarder to .properties.syslog
+Applying setting .properties.plan_collection to tile p-mysql......Done.
+Applying setting .properties.syslog to tile p-mysql......Done.
+Applying Group optional-protections to tile p-mysql.....Call to OM returned error:
+exit status 1
+configuring product...
+setting properties
+could not execute "configure-product": failed to configure product: request failed: unexpected response:
+HTTP/1.1 422 Unprocessable Entity
+Transfer-Encoding: chunked
+Cache-Control: no-cache, no-store
+Connection: keep-alive
+Content-Type: application/json; charset=utf-8
+Date: Tue, 06 Mar 2018 15:34:30 GMT
+Expires: Fri, 01 Jan 1990 00:00:00 GMT
+Pragma: no-cache
+Server: nginx/1.4.6 (Ubuntu)
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Request-Id: 82d9f180-a017-4b67-806c-62177637577a
+X-Runtime: 1.041311
+X-Xss-Protection: 1; mode=block
+
+49
+{"errors":{"optional_protections_recipient_email":["is not a property"]}}
+0
+
+```
 
 
