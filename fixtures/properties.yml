@@ -1,8 +1,8 @@
 # Comment
 syslog_forwarder: disabled
 
-.properties.optional_protections.enable.canary_poll_frequency: 69
-optional_protections_recipient_email: test@null.com
+#.properties.optional_protections.enable.canary_poll_frequency: 69
+#optional_protections_recipient_email: test@null.com
 # .properties.optional_protections.enable.canary3_poll_frequency: 69
 #.properties.optional_protections.enable.canary_p5oll_frequency: 69
 #.properties.optional_protections.enable.canary_4poll_frequency: 69
@@ -11,6 +11,10 @@ optional_protections_recipient_email: test@null.com
 
 
 groups:
+# - name: optional-protections
+#   .properties.optional_protections.enable.canary_poll_frequency: 69
+#   optional_protections_recipient_email: test@null.com
+
 #if you want to enable backups uncomment this section.
 - name: backup
   .properties.backup_options: "enable"
