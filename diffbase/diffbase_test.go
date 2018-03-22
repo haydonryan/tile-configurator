@@ -77,6 +77,18 @@ var _ = Describe("Diffbase", func() {
 				Expect(reflect.DeepEqual(ret, expected)).Should(Equal(true))
 
 			})
+
+			It("should return the new value if the values are different types", func() {
+				base := make(map[string]interface{})
+				changed := make(map[string]interface{})
+				base["first"] = "first"
+
+				changed["first"] = 3.4
+
+				ret := diffbase.Diff(base, changed)
+				Expect(ret).Should(Equal(changed))
+			})
+
 		})
 		Context("Arrays", func() {
 

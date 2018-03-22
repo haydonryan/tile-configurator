@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"reflect"
 
 	"github.com/xchapter7x/lo"
 )
@@ -72,6 +73,10 @@ func Diff(base interface{}, changed interface{}) interface{} {
 	if changed == nil {
 		lo.G.Debug("changed is nil")
 		return nil
+	}
+
+	if reflect.TypeOf(base) != reflect.TypeOf(changed) {
+		return changed
 	}
 	// compare if types are the same
 	// not done yet.
