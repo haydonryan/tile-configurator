@@ -37,7 +37,12 @@ However the end goal is the same - automated PCF deploys.
 
 ### Customer has sandbox deployed and can generate JSON from Ops Managaer
 
-Stage tile
+Stage all the tiles that you wish to use. (Preferably by pipeline)
+Then you can either use the get-tile-params.sh script, or do the manual steps below.
+
+Note that the script will download ALL the paramters for all tiles to the current directory.
+
+
 ```
 $ om-linux -t $TARGET -u $USERNAME -p $PASSWORD -k staged-products
 +---------+-----------------+
