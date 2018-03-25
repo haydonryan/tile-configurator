@@ -78,8 +78,6 @@ func Diff(base interface{}, changed interface{}) interface{} {
 	if reflect.TypeOf(base) != reflect.TypeOf(changed) {
 		return changed
 	}
-	// compare if types are the same
-	// not done yet.
 
 	switch changed.(type) {
 	case map[string]interface{}:
@@ -115,18 +113,24 @@ func Diff(base interface{}, changed interface{}) interface{} {
 			changedMap := changed.([]interface{})
 			baseMap := base.([]interface{})
 			var difference []interface{}
-			//difference := make([]interface{})
 
-			for key, value := range changed.([]interface{}) {
-				diff := Diff(baseMap[key], changedMap[key])
+			// need to iterate through both sides to check if the changed side has new keys comparedd to all
+			// of the base map.
 
+			for changedKey, value := range changed.([]interface{}) {
+				var diff interface{}
+				for baseKey, _ := range base.([]interface{}) {
+					diff = Diff(baseMap[baseKey], changedMap[changedKey])
+					if diff == nil {
+						break
+					}
+				}
 				if diff != nil {
 					difference = append(difference, diff)
 
 				}
 
 				_ = value
-
 			}
 			lo.G.Debugf("Array returning: %v Type %T\n\n", difference, difference)
 			if len(difference) == 0 {

@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/haydonryan/tile-configurator/diffbase"
+	"github.com/xchapter7x/lo"
 	//. "github.com/haydonryan/tile-configurator"
 
 	. "github.com/onsi/ginkgo"
@@ -40,6 +41,18 @@ var _ = Describe("Diffbase", func() {
 			ret := diffbase.Diff(base, changed)
 			Expect(ret).Should(Equal(changed))
 		})
+
+		It("should return the new value if the values are different types", func() {
+			base := make(map[string]interface{})
+			changed := make(map[string]interface{})
+			base["first"] = "first"
+
+			changed["first"] = 3.4
+
+			ret := diffbase.Diff(base, changed)
+			Expect(ret).Should(Equal(changed))
+		})
+
 		Context("Subkeys", func() {
 
 			It("should return the difference to include a subkey of the main key", func() {
@@ -78,15 +91,30 @@ var _ = Describe("Diffbase", func() {
 
 			})
 
-			It("should return the new value if the values are different types", func() {
+			It("should be able to handle arrays when base is a smaller array than changed", func() {
 				base := make(map[string]interface{})
 				changed := make(map[string]interface{})
-				base["first"] = "first"
+				sub := make([]interface{}, 1)
+				sub2 := make([]interface{}, 2)
+				sub3 := make([]interface{}, 1)
 
-				changed["first"] = 3.4
+				expected := make(map[string]interface{})
+
+				sub[0] = "test string"
+				base["test"] = sub
+				sub2[0] = "test string"
+				sub2[1] = "diff string"
+				changed["test"] = sub2
+
+				sub3[0] = "diff string"
+				expected["test"] = sub3
 
 				ret := diffbase.Diff(base, changed)
-				Expect(ret).Should(Equal(changed))
+
+				lo.G.Debug("returned: %v\n", ret)
+				lo.G.Debug("Expected: %v\n", expected)
+
+				Expect(reflect.DeepEqual(ret, expected)).Should(Equal(true))
 			})
 
 		})
