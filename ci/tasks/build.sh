@@ -11,6 +11,8 @@ SOURCE_DIR=$PWD/source-code
 
 # Because this image doesn't have glide in it...
 go get github.com/Masterminds/glide
+# And because we want John's automatic versioning 
+go get github.com/xchapter7x/versioning
 
 # We start in the container default directory
 # but there is no sourcecode 
