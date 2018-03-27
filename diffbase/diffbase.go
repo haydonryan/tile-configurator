@@ -35,7 +35,10 @@ func readJSON(filename string) (map[string]interface{}, error) {
 		log.Fatalf("error: %v", err)
 		return nil, fmt.Errorf("Could not unmartshall File")
 	}
-	return m, nil
+
+	d := RemoveMainProperties(m)
+
+	return d.(map[string]interface{}), nil
 }
 
 func (c *Diffbase) Execute([]string) error {
@@ -56,6 +59,57 @@ func (c *Diffbase) Execute([]string) error {
 	fmt.Println(string(jsonString))
 
 	return nil
+}
+
+func SquishCollection(m interface{}) (map[string]interface{}, error) {
+	//fmt.Printf("Collection: %v %T\n\n\n", m, m)
+	source, correct := m.(map[string]interface{})
+	result := make(map[string]interface{})
+	if correct {
+
+		for k, v := range source {
+			if k == "guid" {
+				continue //ignore guids - we don't want them
+			}
+			//	fmt.Printf("Element: %v %v\n\n\n", k, v.(map[string]interface{})["value"])
+			result[k] = v.(map[string]interface{})["value"]
+
+		}
+	}
+
+	return result, nil
+
+}
+
+// SquishCollections changes a collection from the way that Ops Manager returns
+// it's api to how it expects it to be set
+func SquishCollections(collection []interface{}) []interface{} {
+	var result []interface{}
+	for _, value := range collection {
+		temp, _ := SquishCollection(value)
+		result = append(result, temp)
+
+	}
+
+	return result
+}
+
+// FilterGUIDs filters out the built
+// it's api to how it expects it to be set
+func RemoveNonConfigurable(collection interface{}) interface{} {
+
+	return nil
+}
+
+func RemoveMainProperties(properties interface{}) interface{} {
+
+	p := properties.(map[string]interface{})
+	//	fmt.Printf("%T\n\n", p)
+	if p["properties"] != nil {
+		return p["properties"]
+		//return nil
+	}
+	return properties
 }
 
 //Diffbase returns the additions that map has to a base map
@@ -88,7 +142,16 @@ func Diff(base interface{}, changed interface{}) interface{} {
 			baseMap := base.(map[string]interface{})
 			difference := make(map[string]interface{})
 
+			propertyType := changedMap["type"]
+			if propertyType == "collection" {
+
+				//fmt.Printf("Found\n\n\n\n\n")
+				changedMap["value"] = SquishCollections(changedMap["value"].([]interface{}))
+				return changedMap
+			}
+
 			for key, value := range changed.(map[string]interface{}) {
+
 				diff := Diff(baseMap[key], changedMap[key])
 
 				if diff != nil {
