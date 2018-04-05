@@ -7,6 +7,20 @@ This is a hacked together tool that will read in a yaml file and orchestrate the
 ### Issues / Feature requests
 If you have an issue with this tool - please submit a github issue.  I'm using Pivotal Tracker to manage the backlog for this project, so please contact me directly for access (https://www.pivotaltracker.com/n/projects/2151323).
 
+#### Important Thigns to Note
+Plan collection GUIDs show as 
+```
+"guid": {
+            "type": "uuid",
+            "configurable": false,
+            "credential": false,
+            "value": "3e73ea3a-299a-4a65-a406-6fc5e63dad8c",
+            "optional": false
+          },
+```
+when you pull the properties, even though this shows that configurable is false, _you need to include this guid_.  These UUIDs are used to allow plan names to change, and maintain connection for existing applications. You should put these into your properties.  If you are defining new properties then you can create a GUID for the new plan.
+
+
 ### Benefits
 - Configuration is in YAML rather than jSON - easier to configure, read and maintain.
 - Externalization of configuration (cloud native operations)
