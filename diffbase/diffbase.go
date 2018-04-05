@@ -145,6 +145,10 @@ func Diff(base interface{}, changed interface{}) interface{} {
 				return changedMap
 			}
 
+			if propertyType == "multi_select_options" {
+				return changedMap["value"]
+			}
+
 			for key, value := range changed.(map[string]interface{}) {
 
 				diff := Diff(baseMap[key], changedMap[key])
