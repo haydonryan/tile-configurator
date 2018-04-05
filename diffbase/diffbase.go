@@ -68,12 +68,7 @@ func SquishCollection(m interface{}) (map[string]interface{}, error) {
 	if correct {
 
 		for k, v := range source {
-			if k == "guid" {
-				continue //ignore guids - we don't want them
-			}
-			//	fmt.Printf("Element: %v %v\n\n\n", k, v.(map[string]interface{})["value"])
 			result[k] = v.(map[string]interface{})["value"]
-
 		}
 	}
 
